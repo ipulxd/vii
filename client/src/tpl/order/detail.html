@@ -1,0 +1,135 @@
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row-fluid">
+    <div class="col-10">
+      <h1 class="m-n font-thin h3">Order Details</h1>
+    </div>
+    <div class="col-2 pull-right m-r-md m-t-n-lg">
+      <a href="" onclick="window.history.back()" class="btn btn-primary">
+        <i class="fa fa-chevron-left"></i> Back
+      </a>
+    </div>
+  </div>
+</div>
+<div class="wrapper-md" ng-controller="OrderDetailCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-11 h4">
+          Customer: <strong>{{order.customer.name}}</strong>
+        </div>
+        <div class="col-md-1 pull-right">
+          <a ui-sref="app.order.edit({id:order.id})" class="btn btn-xs btn-success">
+            <i class="fa fa-edit"></i> Edit
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row wrapper-sm">
+      <div class="col-md-4">
+        <i class="icon-basket"></i>
+        Order Method: {{order.orderMethodName}}
+      </div>
+      <div class="col-md-4">
+        <i class="icon-credit-card"></i>
+        Payment Method: {{order.paymentMethodName}}
+      </div>
+      <div class="col-md-4">
+        <i class="icon-layers"></i>
+        Order Group:
+        <a ng-show="order.orderGroup.name" ui-sref="app.ordergroup.detail({id:order.orderGroupId})">
+          {{order.orderGroup.name}}
+          <i class="h6 m-l-xs fa fa-external-link"></i>
+        </a>
+        <span ng-hide="order.orderGroup.name">(none)</span>
+      </div>
+    </div>
+    <div class="row wrapper-sm m-t-n-sm">
+      <div class="col-md-4">
+        <i class="icon-calendar"></i>
+        Purchase Date: {{order.datePurchase | date : "dd-MMM-yyyy"}}
+      </div>
+      <div class="col-md-4">
+        <i class="icon-calendar"></i>
+        Payment Date: {{order.datePayment | date : "dd-MMM-yyyy"}}
+        <span ng-hide="order.datePayment">(none)</span>
+      </div>
+      <div class="col-md-4">
+        <i class="icon-calendar"></i>
+        Delivery Date: {{order.dateDelivery | date : "dd-MMM-yyyy"}}
+        <span ng-hide="order.dateDelivery">(none)</span>
+      </div>
+    </div>
+    <div class="row wrapper-sm m-t-n-sm" ng-show="order.note">
+      <div class="col-md-12">
+        <i class="icon-info"></i>
+        {{order.note}}
+      </div>
+    </div>
+  </div>
+  <div class="panel b-a">
+    <div class="panel-heading no-border bg-primary">
+      <span class="h4 m-r-sm">Order Items</span>
+      <button type="button" class="btn btn-xs btn-success" ng-click="addItem()">
+        <i class="glyphicon glyphicon-plus"></i> Add new
+      </button>
+      <div class="pull-right h4">
+        <span class="h4" ng-show="order.totalPrice">Total Price: </span>
+        <span ng-repeat="(cur, amount) in order.totalPrice">
+          <i class="h6 icon-tag m-l-xs"></i> <strong>{{amount | number}} {{cur}}</strong>
+        </span>
+      </div>
+    </div>
+    <table st-table="displayOrderItems" st-safe-src="orderItems" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="productName">Product Name</th>
+        <th st-sort="quantity">Quantity</th>
+        <th st-sort="priceEach">Price Each</th>
+        <th st-sort="priceTotal">Total</th>
+        <th st-sort="currencyCode">Currency</th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'productName'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'quantity'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'priceEach'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'priceTotal'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'currencyCode'" class="input-sm form-control" type="search"/>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayOrderItems">
+        <td>{{row.productName}}</td>
+        <td class="text-right">{{row.quantity | number}}</td>
+        <td class="text-right">{{row.priceEach | currency: ""}}</td>
+        <td class="text-right">{{row.priceTotal | currency: ""}}</td>
+        <td>{{row.currencyCode}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ng-click="removeItem(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

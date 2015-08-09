@@ -1,0 +1,19 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+      <h3 class="m-t-none m-b font-thin">Add new currency</h3>
+      <form role="form" name="form">
+        <div class="form-group">
+          <label>Code</label>
+          <input type="text" ng-model="currency.code" class="form-control" placeholder="Type currency code.." required ui-focus="true">
+          <label>Name</label>
+          <input type="text" ng-model="currency.name" class="form-control" placeholder="Type currency name.." required>
+        </div>
+        <div class="checkbox m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()" ng-disabled="form.$invalid">
+            <strong>Save</strong>
+          </button>
+          <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">Cancel</button>
+        </div>
+      </form>
+  </div>
+</div>

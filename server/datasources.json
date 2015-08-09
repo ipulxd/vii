@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "postgreDs": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "vii",
+    "password": "vii212",
+    "name": "postgreDs",
+    "user": "viiuser",
+    "connector": "postgresql"
+  }
+}

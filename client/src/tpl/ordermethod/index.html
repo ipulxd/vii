@@ -1,0 +1,35 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >Order Method</h1>
+</div>
+<div class="wrapper-md" ng-controller="OrderMethodCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <button type="button" class="btn btn-sm btn-success" ng-click="add()">
+          <i class="glyphicon glyphicon-plus"></i> Add new
+        </button>
+    </div>
+    <table st-table="displayOrderMethods" st-safe-src="orderMethods" class="table table-striped">
+      <thead>
+      <tr>
+        <th colspan="2"><input st-search="" class="form-control" placeholder="search.." type="text"/></th>
+      </tr>
+      <tr>
+        <th st-sort="name">Method Name</th>
+        <th width="50"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayOrderMethods">
+        <td>{{row.name}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <button ng-click="remove(row)" class="btn btn-xs btn-danger">
+              <i class="fa fa-times"></i> del
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

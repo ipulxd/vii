@@ -1,0 +1,69 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >
+    <i class="fa fa-gift m-r-xs"></i>
+    Product
+  </h1>
+</div>
+<div class="wrapper-md" ng-controller="ProductIndexCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a ui-sref="app.product.new" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Add New Product
+      </a>
+    </div>
+    <table st-table="displayProducts" st-safe-src="products" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="name">Name</th>
+        <th st-sort="active" width="15%">Is Active?</th>
+        <th width="15%"></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'name'" placeholder="search name.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <select ng-model="searchparam.active" class="input-sm form-control">
+            <option value="">All</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayProducts | filter: searchparam">
+        <td>
+          <a ui-sref="app.product.detail({ id: row.id })">
+            {{row.name}}
+          </a>
+        </td>
+        <td>
+          <span ng-if="row.active" class="label bg-primary">Yes</span>
+          <span ng-if="!row.active" class="label bg-light">No</span>
+        </td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.product.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail: Stock, Price">
+              <i class="fa fa-folder-open-o"></i> detail
+            </a>
+            <a ui-sref="app.product.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i> edit
+            </a>
+            <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

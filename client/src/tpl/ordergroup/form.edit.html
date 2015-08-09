@@ -1,0 +1,28 @@
+<div class="row form-group">
+  <div class="col-sm-12 m-l-n-xs">
+    <label class="col-sm-1 control-label">Name</label>
+    <div class="col-sm-11 input-group m-r-sm">
+      <input type="text" placeholder="Group name (required).." class="form-control form-validation" ng-model="orderGroup.name" ng-required="true">
+    </div>
+  </div>
+</div>
+
+<div class="row form-group">
+  <div class="col-sm-12 m-l-n-xs">
+    <label class="col-sm-1 control-label">Note</label>
+    <div class="col-sm-11 input-group m-r-sm">
+      <input type="text" class="form-control form-validation" ng-model="orderGroup.note">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="pull-right m-r-md">
+    <a href="" onclick="window.history.back()" class="btn btn-default">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-success m-r-xs" ng-disabled="form.$invalid">
+      <strong>Save</strong>
+    </button>
+  </div>
+</div>

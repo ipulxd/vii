@@ -1,0 +1,130 @@
+<div class="row m-r-sm">
+  <div class="row form-group">
+    <div class="col-sm-12 m-l-n-xs">
+      <label class="col-sm-2 control-label">Customer Name</label>
+      <div class="col-sm-10 input-group m-r-sm">
+        <ui-select ng-model="order.customerId" ng-required="true" class="form-validation" ng-disabled="order.id">
+          <ui-select-match placeholder="Select or search customer..">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="cus.id as cus in customers | filter: $select.search">
+            <div ng-bind-html="cus.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+        <span class="input-group-btn">
+          <button type="button" ng-click="" class="btn btn-default">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Order Method</label>
+      <div class=" col-sm-8 input-group">
+        <ui-select ng-model="order.orderMethodName" ng-required="true" class="form-validation">
+          <ui-select-match placeholder="Select method..">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="ord.name as ord in orderMethods | filter: $select.search">
+            <div ng-bind-html="ord.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+      <span class="input-group-btn">
+        <button type="button" ng-click="" class="btn btn-default">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Payment Method</label>
+      <div class=" col-sm-8 input-group">
+        <ui-select ng-model="order.paymentMethodName" ng-required="true" class="form-validation">
+          <ui-select-match placeholder="Select method..">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="pay.name as pay in paymentMethods | filter: $select.search">
+            <div ng-bind-html="pay.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+        <span class="input-group-btn">
+          <button type="button" ng-click="" class="btn btn-default">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Purchase Date</label>
+      <div class="col-sm-8 input-group" ng-controller="DatepickerCtrl">
+        <input name="datePurchase" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="order.datePurchase"
+               is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Payment Date</label>
+      <div class="col-sm-8 input-group" ng-controller="DatepickerCtrl">
+        <input name="datePayment" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="order.datePayment"
+               is-open="opened" datepicker-options="dateOptions" ng-required="false" close-text="Close" date-greater-or-equal="order.datePurchase"/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Delivery Date</label>
+      <div class="col-sm-8 input-group" ng-controller="DatepickerCtrl">
+        <input name="dateDelivery" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="order.dateDelivery"
+               is-open="opened" datepicker-options="dateOptions" ng-required="false" close-text="Close" date-greater-or-equal="order.datePurchase"/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <label class="col-sm-4 control-label">Order Group</label>
+      <div class=" col-sm-8 input-group">
+        <ui-select ng-model="order.orderGroupId" class="form-validation">
+          <ui-select-match placeholder="Select group if any..">{{$select.selected.name}}</ui-select-match>
+          <ui-select-choices repeat="grp.id as grp in orderGroups | filter: $select.search">
+            <div ng-bind-html="grp.name | highlight: $select.search"></div>
+            <div ng-bind-html="grp.note | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+        <span class="input-group-btn">
+          <button type="button" ng-click="" class="btn btn-default">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-sm-12 m-l-n-xs">
+      <label class="col-sm-2 control-label">Note</label>
+      <div class="col-sm-10 input-group m-r-sm">
+        <input type="text" class="form-control form-validation" ng-model="order.note">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="pull-right m-r-md">
+    <small ng-show="form.datePayment.$dirty && form.datePayment.$error.dateGreaterOrEqual" class="m-r-sm alert-danger">
+      Payment Date must greater than or equal with Purchase Date
+    </small>
+    <small ng-show="form.dateDelivery.$dirty && form.dateDelivery.$error.dateGreaterOrEqual" class="m-r-sm alert-danger">
+      Delivery Date must greater than or equal with Purchase Date
+    </small>
+    <a href="" onclick="window.history.back()" class="btn btn-default">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-success m-r-xs" ng-disabled="form.$invalid">
+      <strong>Save</strong>
+    </button>
+  </div>
+</div>

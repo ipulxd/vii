@@ -1,0 +1,84 @@
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row-fluid">
+    <div class="col-10">
+      <h1 class="m-n font-thin h3">Order Group Details</h1>
+    </div>
+    <div class="col-2 pull-right m-r-md m-t-n-lg">
+      <a href="" onclick="window.history.back()" class="btn btn-primary">
+        <i class="fa fa-chevron-left"></i> Back
+      </a>
+    </div>
+  </div>
+</div>
+<div class="wrapper-md" ng-controller="OrderGroupDetailCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row h4">
+        Group: <strong>{{orderGroup.name}}</strong>
+      </div>
+    </div>
+    <div class="row wrapper-sm m-t-n-sm" ng-show="orderGroup.note">
+      <div class="col-md-12 m-l-xs">
+        {{orderGroup.note}}
+      </div>
+    </div>
+  </div>
+  <div class="panel b-a">
+    <div class="panel-heading no-border bg-primary">
+      <span class="h4 m-r-sm">Group Members</span>
+      <button type="button" class="btn btn-xs btn-success" ng-click="addOrder()">
+        <i class="glyphicon glyphicon-plus"></i> Add new
+      </button>
+    </div>
+    <table st-table="displayOrders" st-safe-src="orderGroup.orders" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="customer.name">Customer</th>
+        <th st-sort="datePurchase">Purchase Date</th>
+        <th st-sort="orderMethod">Order Method</th>
+        <th st-sort="paymentMethod">Payment Method</th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'customer.name'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'datePurchase'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
+        </th>
+        <th>
+          <input st-search="'orderMethod'" class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'paymentMethod'" class="input-sm form-control" type="search"/>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayOrders">
+        <td>{{row.customer.name}}</td>
+        <td>{{row.datePurchase | date : "dd-MMM-yyyy"}}</td>
+        <td>{{row.orderMethod}}</td>
+        <td>{{row.paymentMethod}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.order.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Info">
+              <i class="fa fa-info-circle"></i> info
+            </a>
+            <a ng-click="removeOrder(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

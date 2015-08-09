@@ -1,0 +1,26 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <h3 class="m-t-none m-b font-thin text-danger">
+      <i class="fa fa-warning"></i>
+      Delete Order
+    </h3>
+    <form role="form">
+      <div class="form-group">
+        <p>Are you sure want to delete this order <strong>{{item.customer.name}}</strong> from group?</p>
+        <span class="col-sm-2">Purchase Date:</span><p>{{item.datePurchase | date : "dd-MMM-yyyy"}}</p>
+        <span class="col-sm-2">Order Method:</span><p>{{item.orderMethodName}}</p>
+        <span class="col-sm-2">Payment Method:</span><p>{{item.paymentMethodName}}</p>
+        <span ng-hide="!item.note" class="col-sm-12">
+          <i class="icon-info text-info"> </i>
+          {{item.note}}
+        </span>
+      </div>
+      <div class="checkbox m-t-lg">
+        <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()">
+          <strong>Delete</strong>
+        </button>
+        <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

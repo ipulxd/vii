@@ -1,0 +1,76 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >
+    <i class="fa fa-user m-r-xs"></i>
+    Customer
+  </h1>
+</div>
+<div class="wrapper-md" ng-controller="CustomerIndexCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a ui-sref="app.customer.new" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Add New Customer
+      </a>
+    </div>
+    <table st-table="displayCustomers" st-safe-src="customers" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="name">Name</th>
+        <th st-sort="address">Address</th>
+        <th st-sort="phone">Phone</th>
+        <th st-sort="contactPerson">Contact Person</th>
+        <th st-sort="mobilePhone">Mobile Phone</th>
+        <th st-sort="isGroup">Is Group</th>
+        <th width="50"></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'name'" placeholder="search name.." class="input-sm form-control" type="search"/>
+        </th>
+        <th colspan="2">
+          <input st-search="'addressCity'"  placeholder="search address.." class="input-sm form-control" type="search"/>
+        </th>
+        <th colspan="2">
+          <input st-search="'contactPerson'" placeholder="search contact.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <select ng-model="searchparam.isGroup" class="input-sm form-control">
+            <option value="">All</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayCustomers | filter: searchparam">
+        <td>{{row.name}}</td>
+        <td>{{row.addressCity}}, {{row.addressProvince}}</td>
+        <td>{{row.phone}}</td>
+        <td>{{row.contactPerson}}</td>
+        <td>{{row.mobilePhone}}</td>
+        <td>
+          <span ng-if="row.isGroup" class="label bg-primary">Yes</span>
+          <span ng-if="!row.isGroup" class="label bg-light">No</span>
+        </td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.customer.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i>
+            </a>
+            <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >
+    <i class="fa fa-tags m-r-xs"></i>
+    Order Group
+  </h1>
+</div>
+<div class="wrapper-md" ng-controller="OrderGroupIndexCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a ui-sref="app.ordergroup.new" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Add New Order Group
+      </a>
+    </div>
+    <table st-table="displayOrderGroups" st-safe-src="orderGroups" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="name">Name</th>
+        <th st-sort="note">Note</th>
+        <th st-sort="member" width="5%">Member</th>
+        <th width="15%"></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'name'" placeholder="search name.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'note'" placeholder="search note.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayOrderGroups">
+        <td>{{row.name}}</td>
+        <td>{{row.note}}</td>
+        <td class="text-right">{{row.orders.length | number}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.ordergroup.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Order group member">
+              <i class="fa fa-folder-open-o"></i> member
+            </a>
+            <a ui-sref="app.ordergroup.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i> edit
+            </a>
+            <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

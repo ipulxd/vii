@@ -1,0 +1,20 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <h3 class="m-t-none m-b font-thin text-warning">Stock Status Update</h3>
+    <form role="form">
+      <div class="form-group">
+        <p>Are you sure want to update this stock status from <strong>{{item.active}}</strong> to <strong>{{!item.active}}</strong>?
+        <p>Batch name: {{item.batchName}}</p>
+        <p>Entried at {{item.dateStock | date : "dd-MMM-yyyy"}}</p>
+        <p>Expire at {{item.dateExpire | date : "dd-MMM-yyyy"}}</p>
+        <p>Current stock: {{item.amountCurrent | number}}</p>
+      </div>
+      <div class="checkbox m-t-lg">
+        <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()">
+          <strong>Yes</strong>
+        </button>
+        <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">No</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button type="button" class="btn btn-sm btn-success m-r-sm" ng-click="addPrice()">
+      <i class="glyphicon glyphicon-plus"></i> Add new
+    </button>
+    <div class="m-t-xs pull-right">
+      <span ng-hide="!currentPrice" class="text-info-dker">
+        <i class="fa fa-lightbulb-o"></i>
+        Default price will be used is <strong>{{currentPrice.amount | number}} [{{currentPrice.currencyCode}}]</strong>
+        from {{currentPrice.dateFrom | date : "dd-MMM-yyyy"}} to {{currentPrice.dateTo | date : "dd-MMM-yyyy"}}
+      </span>
+      <span ng-hide="currentPrice" class="text-danger">
+        <i class="fa fa-warning"></i>
+        No active price for this product at this moment!
+      </span>
+    </div>
+  </div>
+  <table st-table="displayProductPrices" st-safe-src="productPrices" class="table table-striped">
+    <thead>
+    <tr>
+      <th st-sort="name">Name</th>
+      <th st-sort="dateFrom">Start Date</th>
+      <th st-sort="dateTo">End Date</th>
+      <th st-sort="amount">Amount</th>
+      <th st-sort="currencyCode">Currency</th>
+      <th st-sort="active" width="15%">Is Active?</th>
+      <th></th>
+    </tr>
+    <tr>
+      <th>
+        <input st-search="'name'" class="input-sm form-control" type="search"/>
+      </th>
+      <th>
+        <input st-search="'dateFrom'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
+      </th>
+      <th>
+        <input st-search="'dateTo'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
+      </th>
+      <th>
+        <input st-search="'amount'" class="input-sm form-control" type="search"/>
+      </th>
+      <th>
+        <input st-search="'currencyCode'" class="input-sm form-control" type="search"/>
+      </th>
+      <th>
+        <select ng-model="searchparam.active" class="input-sm form-control">
+          <option value="">All</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in displayProductPrices | filter: searchparam">
+      <td>{{row.name}}</td>
+      <td>{{row.dateFrom | date : "dd-MMM-yyyy"}}</td>
+      <td>{{row.dateTo | date : "dd-MMM-yyyy"}}</td>
+      <td class="text-right">{{row.amount | currency:""}}</td>
+      <td>{{row.currencyCode}}</td>
+      <td>
+        <a ng-click="togglePriceStatus(row)">
+          <span ng-if="row.active" class="label bg-primary">Yes</span>
+          <span ng-if="!row.active" class="label bg-light">No</span>
+        </a>
+        <span ng-if="(row.id===currentPrice.id)" class="label bg-success">Default</span>
+      </td>
+      <td style="white-space: nowrap">
+        <div class="buttons">
+          <a ng-click="removePrice(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+            <i class="fa fa-times"></i> del
+          </a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="5" class="text-center">
+        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+      </td>
+    </tr>
+    </tfoot>
+  </table>
+</div>

@@ -1,0 +1,113 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.name" required >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Contact Person</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.contactPerson" >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Mobile Phone</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.mobilePhone">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Is a Group?</label>
+      <div class="col-sm-9">
+        <label class="i-switch bg-primary m-t-xs m-r">
+          <input type="checkbox" ng-model="customer.isGroup">
+          <i></i>
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Member of</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <ui-select ng-model="customer.parentId" theme="bootstrap">
+            <ui-select-match placeholder="Select or search a customer in the list...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="item.id as item in groupCustomers | filter: $select.search">
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+              <small ng-bind-html="item.contactPerson | highlight: $select.search"></small>
+            </ui-select-choices>
+          </ui-select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="customer.parentId = undefined" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Is a Active?</label>
+      <div class="col-sm-9">
+        <label class="i-switch bg-success m-t-xs m-r">
+          <input type="checkbox" ng-model="customer.active">
+          <i></i>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Address</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.addressStreet" >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">City</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.addressCity" >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Province</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.addressProvince" >
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Postal Code</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.postalCode">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Phone</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.phone">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Fax</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="customer.fax">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Email</label>
+      <div class="col-sm-9">
+        <input type="email" class="form-control" ng-model="customer.email" >
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="pull-right m-r-sm">
+    <a href="" onclick="window.history.back()" class="btn btn-default">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-success m-r-xs" ng-disabled="form.$invalid">
+      <strong>Save</strong>
+    </button>
+  </div>
+</div>

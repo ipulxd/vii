@@ -1,0 +1,60 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <h3 class="m-t-none m-b font-thin">Add new stock</h3>
+    <form role="form" name="form">
+      <div class="row">
+        <div class="form-group col-lg-9">
+          <label>Batch Name</label>
+          <input type="text" ng-model="item.batchName" class="form-control form-validation" ng-required="true" ui-focus="true">
+        </div>
+        <div class="form-group col-lg-3">
+          <label>Is a Active?</label>
+          <div>
+            <label class="i-switch bg-success m-t-xs m-r">
+              <input type="checkbox" ng-model="item.active">
+              <i></i>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label>Stock Date</label>
+          <div class="input-group w-md" ng-controller="DatepickerCtrl">
+            <input name="dateStock" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateStock"
+                   is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+          </div>
+        </div>
+        <div class="form-group col-lg-6">
+          <label>Expiration Date</label>
+          <div class="input-group w-md" ng-controller="DatepickerCtrl">
+            <input name="dateExpire" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateExpire"
+                   is-open="opened" datepicker-options="dateOptions"  close-text="Close" ng-required="true" date-greater-than="item.dateStock" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+          </div>
+          <small ng-show="form.dateExpire.$dirty && form.dateExpire.$error.dateGreaterThan" class="alert-danger">Expiration Date must greater than Stock Date</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label>Amout</label>
+          <input type="number" ng-model="item.amountStart" class="form-control form-validation" placeholder="Number only.." ng-required="true">
+        </div>
+        <div class="form-group col-lg-6">
+        </div>
+      </div>
+
+      <div class="checkbox m-t-lg">
+        <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()" ng-disabled="form.$invalid">
+          <strong>Save</strong>
+        </button>
+        <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

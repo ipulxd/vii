@@ -1,0 +1,12 @@
+<div class="wrapper-md" ng-controller="CustomerNewCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading font-bold">
+      Add Customer
+    </div>
+    <div class="panel-body">
+    <form class="form-horizontal form-validation" role="form" ng-submit="addCustomer()" name="form">
+      <div ng-include="'tpl/customer/form.html'"></div>
+    </form>
+    </div>
+  </div>
+</div>

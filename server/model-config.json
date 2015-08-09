@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ]
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Customer": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "Person": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "Product": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "PaymentMethod": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "Currency": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "OrderGroup": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "OrderMethod": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "Order": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "ProductPrice": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "ProductStock": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "OrderItem": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "VACL": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "VRoleMapping": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "VRole": {
+    "dataSource": "postgreDs",
+    "public": true
+  },
+  "VAccessToken": {
+    "dataSource": "postgreDs",
+    "public": true
+  }
+}

@@ -1,0 +1,19 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <h3 class="m-t-none m-b font-thin">Price Status Update</h3>
+    <form role="form">
+      <div class="form-group">
+        <p>Are you sure want to update this price status from <strong>{{item.active}}</strong> to <strong>{{!item.active}}</strong>?
+        <p>Product price: <strong>{{item.amount}} [{{item.currencyCode}}]</strong></p>
+        <p>Valid for {{item.dateFrom | date : "dd-MMM-yyyy"}} to {{item.dateTo | date : "dd-MMM-yyyy"}}</p>
+        <small ng-hide="!item.note">{{item.note}}</small>
+      </div>
+      <div class="checkbox m-t-lg">
+        <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()">
+          <strong>Yes</strong>
+        </button>
+        <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">No</button>
+      </div>
+    </form>
+  </div>
+</div>
