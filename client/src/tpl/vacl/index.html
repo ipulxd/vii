@@ -1,0 +1,54 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >Access Permission</h1>
+</div>
+<div class="wrapper-md" ng-controller="VACLCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <button type="button" class="btn btn-sm btn-success" ng-click="add()">
+          <i class="glyphicon glyphicon-plus"></i> Add new
+        </button>
+    </div>
+    <table st-table="displayACLs" st-safe-src="ACLs" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="model">Model</th>
+        <th st-sort="property">Property</th>
+        <th st-sort="accessType">Access Type</th>
+        <th st-sort="principalType">Principal Type</th>
+        <th st-sort="principalId">Principal ID</th>
+        <th st-sort="permission">Permission</th>
+        <th width="50"></th>
+      </tr>
+      <tr>
+        <th><input st-search="'model'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th><input st-search="'property'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th><input st-search="'accessType'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th><input st-search="'principalType'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th><input st-search="'principalId'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th><input st-search="'permission'" placeholder="search.." class="input-sm form-control" type="search"/></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayACLs">
+        <td>{{row.model}}</td>
+        <td>{{row.property}}</td>
+        <td>{{row.accessType}}</td>
+        <td>{{row.principalType}}</td>
+        <td>{{row.principalId}}</td>
+        <td>{{row.permission}}</td>
+        <td style="white-space: nowrap" >
+          <div class="buttons">
+            <button ng-click="edit(row)" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

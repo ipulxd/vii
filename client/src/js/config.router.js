@@ -4,16 +4,32 @@
  * Config for the router
  */
 angular.module('app')
-  .run(
-  ['$rootScope', '$state', '$stateParams',
-    function ($rootScope, $state, $stateParams) {
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-    }
-  ]
-)
-  .config(
-  ['$stateProvider', '$urlRouterProvider', 'JQ_CONFIG',
+  .run(['$rootScope', '$state', '$stateParams', 'AuthService',
+      function ($rootScope, $state, $stateParams, AuthService) {
+        //$rootScope.$state = $state;
+        //$rootScope.$stateParams = $stateParams;
+
+        $rootScope.$on('$stateChangeStart', function (e, toState, toParams, fromState, fromParams) {
+
+          var toLogin = toState.name === 'access.signin';
+          if (toLogin) { // if state to login don't continue
+            return;
+          }
+
+          if (AuthService.isLoggedIn()) {
+            $rootScope.$state = $state;
+            $rootScope.$stateParams = $stateParams;
+            return true;
+          } else {
+            e.preventDefault();
+            $state.go('access.signin');
+          }
+
+        });
+      }
+    ]
+  )
+  .config(['$stateProvider', '$urlRouterProvider', 'JQ_CONFIG',
     function ($stateProvider, $urlRouterProvider, JQ_CONFIG) {
 
       $urlRouterProvider
@@ -142,7 +158,7 @@ angular.module('app')
               function ($ocLazyLoad) {
                 return $ocLazyLoad.load(['smart-table', 'toaster', 'ui.select', 'textAngular']).then(
                   function () {
-                    return $ocLazyLoad.load(['js/controllers/product.js',JQ_CONFIG.moment]);
+                    return $ocLazyLoad.load(['js/controllers/product.js', JQ_CONFIG.moment]);
                   }
                 )
               }]
@@ -167,25 +183,72 @@ angular.module('app')
         .state('app.setting', {
           abstract: true,
           url: '/setting',
-          template: '<div ui-view></div>'
+          template: '<div ui-view></div>',
+          resolve: {
+            deps: ['$ocLazyLoad',
+              function ($ocLazyLoad) {
+                return $ocLazyLoad.load(['smart-table', 'toaster', 'ui.select', 'textAngular']).then(
+                  function () {
+                    return $ocLazyLoad.load(JQ_CONFIG.moment);
+                  }
+                )
+              }]
+          }
         })
         .state('app.setting.user', {
           url: '/user',
           templateUrl: 'tpl/user/index.html',
           resolve: {
             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
-              return $ocLazyLoad.load('smart-table').then(
-                function () {
-                  return $ocLazyLoad.load('js/controllers/user.js');
-                }
-              )
+              return $ocLazyLoad.load('js/controllers/user.js');
             }]
           }
         })
-        //TODO: put logic on these route
-        //.state('app.setting.group')
-        //.state('app.setting.accesslist')
-
+        .state('app.setting.usernew', {
+          url: '/user/new',
+          templateUrl: 'tpl/user/new.html',
+          resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load('js/controllers/user.js');
+            }]
+          }
+        })
+        .state('app.setting.useredit', {
+          url: '/user/:id/edit',
+          templateUrl: 'tpl/user/edit.html',
+          resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load('js/controllers/user.js');
+            }]
+          }
+        })
+        .state('app.setting.userpasswd', {
+          url: '/user/:id/passwd',
+          templateUrl: 'tpl/user/passwd.html',
+          resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load('js/controllers/user.js');
+            }]
+          }
+        })
+        .state('app.setting.group', {
+          url: '/group',
+          templateUrl: 'tpl/group/index.html',
+          resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load('js/controllers/group.js');
+            }]
+          }
+        })
+        .state('app.setting.accesslist', {
+          url: '/accesslist',
+          templateUrl: 'tpl/vacl/index.html',
+          resolve: {
+            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+              return $ocLazyLoad.load('js/controllers/vacl.js');
+            }]
+          }
+        })
         .state('app.setting.ordermethod', {
           url: '/ordermethod',
           templateUrl: 'tpl/ordermethod/index.html',

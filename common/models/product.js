@@ -216,7 +216,7 @@ module.exports = function(Product) {
         {arg: 'id', type: 'number', required: 'true'},
         {arg: 'limit', type: 'number', http: {source: 'query'}}
       ],
-      returns: {arg: 'currentPriceOptions', type: 'Array', root: true}
+      returns: {arg: 'currentPriceOptions', type: 'array', root: true}
     }
   );
   Product.remoteMethod (
@@ -228,7 +228,7 @@ module.exports = function(Product) {
         {arg: 'id', type: 'number', required: 'true'},
         {arg: 'limit', type: 'number', http: {source: 'query'}}
       ],
-      returns: {arg: 'currentStockOptions', type: 'Array', root: true}
+      returns: {arg: 'currentStockOptions', type: 'array', root: true}
     }
   );
   Product.remoteMethod (
@@ -248,7 +248,7 @@ module.exports = function(Product) {
         {arg: 'cmd', type: 'string', required: true, http: {source: 'query'}},
         {arg: 'data', type: 'array', required: true, http: {source: 'body'}}
       ],
-      returns: {arg: 'bulkUpdateStockAmount', type: 'Array', root: true}
+      returns: {arg: 'bulkUpdateStockAmount', type: 'array', root: true}
     }
   );
 

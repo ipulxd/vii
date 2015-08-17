@@ -1,0 +1,34 @@
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <h3 class="m-t-none m-b font-thin">Delete permission?</h3>
+    <form role="form">
+      <div class="form-group">
+        <p>Are you sure want to delete this permission?</p>
+        <table class="table">
+          <tr>
+            <th>Model</th>
+            <th>Property</th>
+            <th>Access Type</th>
+            <th>Principal Type</th>
+            <th>Principal ID</th>
+            <th>Permission</th>
+          </tr>
+          <tr>
+            <td>{{item.model}}</td>
+            <td>{{item.property}}</td>
+            <td>{{item.accessType}}</td>
+            <td>{{item.principalType}}</td>
+            <td>{{item.principalId}}</td>
+            <td>{{item.permission}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="checkbox m-t-lg">
+        <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()">
+          <strong>Delete</strong>
+        </button>
+        <button class="btn btn-sm pull-right text-uc m-t-n-xs" ng-click="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -2,16 +2,20 @@
 
 /* Controllers */
   // signin controller
-app.controller('SigninFormController', ['$scope', 'AuthService', '$state',
-  function($scope, AuthService, $state) {
+app.controller('SigninFormController', ['$rootScope', '$scope', 'AuthService', '$state',
+  function($rootScope, $scope, AuthService, $state) {
     // clear user session
-    // TODO: membuat pesan logged out
-    //AuthService.logout();
-    //console.log(currentUser);
-    var current = AuthService.getCurrentUser();
-    console.log(current);
-    $scope.authError = current;
 
+    if (AuthService.isLoggedIn()) {
+      AuthService.logout().then(
+        function () {
+          $scope.authError = 'Successfully logged out';
+        },
+        function () {
+          $scope.authError = 'Failed to log out';
+        }
+      );
+    }
 
     $scope.authError = null;
     $scope.login = function() {

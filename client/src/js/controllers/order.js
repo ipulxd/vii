@@ -1,8 +1,8 @@
 /**
  * Created by saiful.
  */
-app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filter',
-  function($scope, Order, $modal, toaster, $filter) {
+app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filter', 'AuthService',
+  function($scope, Order, $modal, toaster, $filter, AuthService) {
 
     //  pagination
     $scope.itemsByPage=10;

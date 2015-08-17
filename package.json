@@ -47,5 +47,18 @@
     "name": "Saiful Anwar",
     "email": "saiful.anwar@gmail.com",
     "url": "http://kirokiro.net"
-  }
+  },
+  "bundleDependencies": [
+    "async",
+    "compression",
+    "cors",
+    "errorhandler",
+    "loopback",
+    "loopback-boot",
+    "loopback-connector-postgresql",
+    "loopback-datasource-juggler",
+    "loopback-explorer",
+    "serve-favicon",
+    "strong-express-metrics"
+  ]
 }

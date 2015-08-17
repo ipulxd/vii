@@ -82,5 +82,9 @@
   "VAccessToken": {
     "dataSource": "postgreDs",
     "public": true
+  },
+  "Setting": {
+    "dataSource": null,
+    "public": false
   }
 }

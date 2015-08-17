@@ -1,6 +1,68 @@
 <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3" >Users</h1>
+  <h1 class="m-n font-thin h3" >
+    <i class="fa fa-user m-r-xs"></i>
+    Users
+  </h1>
 </div>
-<div class="wrapper-md" ng-controller="UserCtrl">
-
+<div class="wrapper-md" ng-controller="UserIndexCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a ui-sref="app.setting.usernew" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> Add New User
+      </a>
+    </div>
+    <table st-table="displayUsers" st-safe-src="users" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="firstname">First Name</th>
+        <th st-sort="lastname">Last Name</th>
+        <th st-sort="email">First Name</th>
+        <th st-sort="phone">Phone</th>
+        <th width="15%"></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'firstname'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'lastname'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'email'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'phone'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displayUsers | filter: searchparam">
+        <td>{{row.firstname}}</td>
+        <td>{{row.lastname}}</td>
+        <td>{{row.email}}</td>
+        <td>{{row.phone}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.setting.userpasswd({ id: row.id })" class="btn btn-xs btn-info" tooltip="Change password">
+              <i class="fa fa-key"></i> passwd
+            </a>
+            <a ui-sref="app.setting.useredit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i> edit
+            </a>
+            <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
