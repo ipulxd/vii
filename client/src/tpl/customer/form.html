@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-6">
     <div class="form-group">
-      <label class="col-sm-3 control-label">Name</label>
+      <label class="col-sm-3 control-label">Nama</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.name" required >
       </div>
@@ -13,13 +13,16 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">Mobile Phone</label>
+      <label class="col-sm-3 control-label">Handphone</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.mobilePhone">
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Is a Group?</label>
+    <div class="form-group" ng-hide="( customer.orderMethodName==='Kanvas' || customer.parent )">
+      <label class="col-sm-3 control-label">
+        <i class="icon icon-question" tooltip="Aktifkan jika yang didata adalah pusat (dan memiliki cabang)"></i>
+        Group ?
+      </label>
       <div class="col-sm-9">
         <label class="i-switch bg-primary m-t-xs m-r">
           <input type="checkbox" ng-model="customer.isGroup">
@@ -27,11 +30,14 @@
         </label>
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Member of</label>
+    <div class="form-group" ng-hide="( customer.orderMethodName==='Kanvas' || customer.parent )">
+      <label class="col-sm-3 control-label">
+        <i class="icon icon-question" tooltip="Pilih group/pusat dari pelanggan yang sedang di data"></i>
+        Anggota dari
+      </label>
       <div class="col-sm-9">
         <div class="input-group">
-          <ui-select ng-model="customer.parentId" theme="bootstrap">
+          <ui-select ng-model="customer.parentId" theme="bootstrap" ng-disabled="customer.isGroup===true">
             <ui-select-match placeholder="Select or search a customer in the list...">{{$select.selected.name}}</ui-select-match>
             <ui-select-choices repeat="item.id as item in groupCustomers | filter: $select.search">
               <div ng-bind-html="item.name | highlight: $select.search"></div>
@@ -47,7 +53,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">Is a Active?</label>
+      <label class="col-sm-3 control-label">Aktif ?</label>
       <div class="col-sm-9">
         <label class="i-switch bg-success m-t-xs m-r">
           <input type="checkbox" ng-model="customer.active">
@@ -58,31 +64,31 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
-      <label class="col-sm-3 control-label">Address</label>
+      <label class="col-sm-3 control-label">Alamat</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.addressStreet" >
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">City</label>
+      <label class="col-sm-3 control-label">Kota</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.addressCity" >
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">Province</label>
+      <label class="col-sm-3 control-label">Provinsi</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.addressProvince" >
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">Postal Code</label>
+      <label class="col-sm-3 control-label">Kode Pos</label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" ng-model="customer.postalCode">
+        <input type="number" class="form-control" ng-model="customer.postalCode" minlength="5" maxlength="5">
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">Phone</label>
+      <label class="col-sm-3 control-label">Telp</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" ng-model="customer.phone">
       </div>

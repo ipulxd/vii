@@ -43,10 +43,6 @@
     "dataSource": "postgreDs",
     "public": true
   },
-  "OrderGroup": {
-    "dataSource": "postgreDs",
-    "public": true
-  },
   "OrderMethod": {
     "dataSource": "postgreDs",
     "public": true
@@ -86,5 +82,17 @@
   "Setting": {
     "dataSource": null,
     "public": false
+  },
+  "SONumber": {
+    "dataSource": "postgreDs",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
+  },
+  "SOGroup": {
+    "dataSource": "postgreDs",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }

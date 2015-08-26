@@ -1,0 +1,51 @@
+<div class="row form-group">
+  <div class="col-sm-12 m-l-n-xs">
+    <label class="col-sm-1 control-label">Nama</label>
+    <div class="col-sm-11 input-group m-r-sm">
+      <input type="text" placeholder="Group name (required).." class="form-control form-validation" ng-model="soGroup.name" ng-required="true">
+    </div>
+  </div>
+</div>
+
+<div class="row form-group">
+  <div class="col-sm-12 m-l-n-xs">
+    <label class="col-sm-1 control-label">Catatan</label>
+    <div class="col-sm-11 input-group m-r-sm">
+      <input type="text" class="form-control form-validation" ng-model="soGroup.note">
+    </div>
+  </div>
+</div>
+
+<div class="row form-group">
+  <div class="col-sm-12 m-l-n-xs input-group">
+    <label class="col-sm-1 control-label">Max Limit</label>
+    <div class="col-sm-3">
+      <input type="number" class="form-control form-validation" ng-model="soGroup.maxLimit" ng-required="true">
+    </div>
+    <label class="col-sm-2 control-label">Mata Uang</label>
+    <div class="col-sm-3 input-group">
+      <ui-select ng-model="soGroup.currencyCode" ng-required="true" class="form-validation">
+        <ui-select-match placeholder="Select..">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="cur.code as cur in soGroup.currencies | filter: $select.search">
+          <div ng-bind-html="cur.name | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+      <span class="input-group-btn">
+        <button type="button" ng-click="" class="btn btn-default">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="pull-right m-r-md">
+    <a href="" onclick="window.history.back()" class="btn btn-default">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-success m-r-xs" ng-disabled="form.$invalid">
+      <strong>Save</strong>
+    </button>
+  </div>
+</div>

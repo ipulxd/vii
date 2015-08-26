@@ -53,8 +53,9 @@ app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filt
 
   }]);
 
-app.controller('OrderNewCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', 'PaymentMethod', 'OrderGroup', '$state', 'toaster',
-  function ($scope, Order, Customer, OrderMethod, PaymentMethod, OrderGroup, $state, toaster) {
+app.controller('OrderNewCtrl', ['$scope', '$rootScope', 'Order', 'Customer', 'OrderMethod', 'PaymentMethod',
+  'OrderGroup', '$state', 'toaster',
+  function ($scope, $rootScope, Order, Customer, OrderMethod, PaymentMethod, OrderGroup, $state, toaster) {
 
     // init
     $scope.order = new Order();
@@ -62,8 +63,8 @@ app.controller('OrderNewCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', 'P
     // default values
     $scope.order.datePurchase = moment().format('DD-MMMM-YYYY');
 
-    // TODO: Get current user
-    $scope.order.personId = 15; // temporary val
+    // Get user id
+    $scope.order.personId = $rootScope.currentUser.id;
 
     // get-all customers
     Customer.find(
@@ -91,6 +92,8 @@ app.controller('OrderNewCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', 'P
     );
 
     $scope.addOrder = function () {
+      // Get user id
+      $scope.order.personId = $rootScope.currentUser.id;
       Order.create(
         {},
         $scope.order,
@@ -171,7 +174,7 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
     $scope.order = {};
     Order.findById({
       id: $stateParams.id,
-      filter: {include: ['customer', 'orderGroup']}
+      filter: {include: ['customer', 'orderGroup', 'person']}
     }, function (result) {
       $scope.order = result;
       $scope.order.datePurchase = $filter('date')(result.datePurchase, 'yyyy-MM-dd'); //cast date as localtime
@@ -363,7 +366,6 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
       });
     };
 
-
     // remove item
     $scope.removeItem = function (row) {
       var modalInstance = $modal.open({
@@ -402,6 +404,62 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
             }
           }
         );
+      });
+    };
+
+    $scope.orderInvoice = function () {
+      console.log($scope);
+      var modalInstance = $modal.open({
+        templateUrl: 'tpl/order/invoice.html',
+        controller: 'OrderModalInstanceCtrl',
+        size: 'lg',
+        resolve: {
+          item: function () {
+            return $scope;
+          }
+        }
+      });
+
+    };
+
+  }]);
+
+app.controller('OrderInvoiceCtrl', ['$scope', 'Order', 'Product', '$state',
+  '$stateParams', '$modal', 'toaster', '$filter',
+  function ($scope, Order, Product, $state, $stateParams, $modal, toaster, $filter) {
+
+    // get current order
+    $scope.order = {};
+    Order.findById({
+      id: $stateParams.id,
+      filter: {include: ['customer', 'orderGroup']}
+    }, function (result) {
+      $scope.order = result;
+      $scope.order.datePurchase = $filter('date')(result.datePurchase, 'yyyy-MM-dd'); //cast date as localtime
+      $scope.order.datePayment = $filter('date')(result.datePayment, 'yyyy-MM-dd');
+      $scope.order.dateDelivery = $filter('date')(result.dateDelivery, 'yyyy-MM-dd');
+      $scope.order.totalPrice = {};  // reset object
+      $scope.getAllOrderItems(); // get-all order items
+    });
+
+    // start: ORDER ITEMS (table contents)
+    $scope.orderItems = [];
+
+    // get-all order items function
+    $scope.getAllOrderItems = function () {
+      Order.orderItems({
+        id: $stateParams.id, // id of the order
+        filter: {
+          include: ['product']
+        }
+      }, function (result) {
+        angular.forEach(result, function (val, key) {
+          result[key].productName = val.product.name;
+          $scope.order.totalPrice = $scope.calculateTotalOrderPrice(
+            val.currencyCode, val.priceTotal, $scope.order.totalPrice);
+        });
+        $scope.orderItems = result;
+        $scope.displayOrderItems = [].concat($scope.orderItems);
       });
     };
   }]);

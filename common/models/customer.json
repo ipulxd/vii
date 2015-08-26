@@ -218,6 +218,22 @@
       },
       "_selectable": true
     },
+    "orderMethodName": {
+      "type": "String",
+      "required": true,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "t_order_method_name",
+        "dataType": "character varying",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "NO"
+      },
+      "_selectable": false
+    },
     "id": {
       "type": "Number",
       "id": true,
@@ -263,6 +279,11 @@
       "model": "OrderGroup",
       "foreignKey": "customerId",
       "through": "Order"
+    },
+    "orderMethod": {
+      "type": "belongsTo",
+      "model": "OrderMethod",
+      "foreignKey": "orderMethodName"
     }
   },
   "acls": [

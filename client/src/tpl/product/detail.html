@@ -1,44 +1,43 @@
-<div class="bg-light lter b-b wrapper-md">
-  <div class="row-fluid">
-    <div class="col-10">
-      <h1 class="m-n font-thin h3">Product Details</h1>
-    </div>
-    <div class="col-2 pull-right m-r-md m-t-n-lg">
-      <a href="" onclick="window.history.back()" class="btn btn-primary">
-        <i class="fa fa-chevron-left"></i> Back
-      </a>
+<div ng-controller="ProductDetailCtrl">
+  <div class="bg-light lter b-b wrapper-md">
+    <div class="row-fluid">
+      <div class="col-10">
+        <h1 class="font-thin h3">
+          Detail Produk: <strong>{{product.name}}</strong>
+          <small>
+            <span ng-if="product.active" class="label bg-success"><i class="icon-check"></i> Aktif</span>
+            <span ng-if="!product.active" class="label bg-dark"><i class="icon-close"></i> Tidak Aktif</span>
+          </small>
+        </h1>
+      </div>
+      <div class="col-2 pull-right m-r-md m-t-n-lg">
+        <a href="" onclick="window.history.back()" class="btn btn-primary">
+          <i class="fa fa-chevron-left"></i> Back
+        </a>
+      </div>
     </div>
   </div>
-</div>
-<div class="wrapper-md" ng-controller="ProductDetailCtrl">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="col-2 pull-left m-r-sm">
-        <span ng-if="product.active" class="btn btn-xs btn-primary"><i class="fa fa-thumbs-up"></i> Active</span>
-        <span ng-if="!product.active" class="btn btn-xs btn-dark"><i class="fa fa-thumbs-down"></i> Not Active</span>
-      </div>
-      <div class="col-10"><strong>{{product.name}}</strong></div>
-    </div>
-    <div class="row wrapper">
-      <div class="container col-lg-12">
-        <div class="m-b-sm" ng-bind-html="product.note" ng-hide="!product.note"></div>
-
-          <tabset class="tab-container">
-            <tab>
-              <tab-heading>
-                <i class="fa fa-money"></i> Price
-              </tab-heading>
-              <div ng-include="'tpl/product/price.html'"></div>
-            </tab>
-            <tab>
-              <tab-heading>
-                <i class="fa fa-cubes"></i> Stock
-              </tab-heading>
-              <div ng-include="'tpl/product/stock.html'"></div>
-            </tab>
-          </tabset>
-
+  <div class="wrapper-md m-b-n-xl" ng-show="product.note">
+    <div class="panel panel-default">
+      <div class="row wrapper">
+        <div class="container col-md-12" ng-bind-html="product.note"></div>
       </div>
     </div>
+  </div>
+  <div class="wrapper-md" >
+    <tabset class="tab-container" justified="true">
+      <tab>
+        <tab-heading>
+          <i class="icon icon-tag"></i> Harga
+        </tab-heading>
+        <div ng-include="'tpl/product/price.html'"></div>
+      </tab>
+      <tab>
+        <tab-heading>
+          <i class="icon icon-layers"></i> Stok
+        </tab-heading>
+        <div ng-include="'tpl/product/stock.html'"></div>
+      </tab>
+    </tabset>
   </div>
 </div>

@@ -12,8 +12,8 @@ angular.module('app')
 
       // config
       $scope.app = {
-        name: 'VII | Sales Application',
-        shortName: 'VII:Sales App',
+        name: '7 | Sales Application',
+        shortName: '7:Sales App',
         version: '1.0.0',
         // for chart colors
         color: {
@@ -57,8 +57,8 @@ angular.module('app')
       // angular translate
       $scope.lang = {isopen: false};
       //$scope.langs = {en: 'English', de_DE: 'German', it_IT: 'Italian'};
-      $scope.langs = {en: 'English'};
-      $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "English";
+      $scope.langs = {id_ID: 'Bahasa'};
+      $scope.selectLang = $scope.langs[$translate.proposedLanguage()] || "Bahasa";
       $scope.setLang = function (langKey, $event) {
         // set the current lang
         $scope.selectLang = $scope.langs[langKey];

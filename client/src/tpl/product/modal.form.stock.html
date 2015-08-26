@@ -1,14 +1,14 @@
 <div class="modal-body wrapper-lg">
   <div class="row">
-    <h3 class="m-t-none m-b font-thin">Add new stock</h3>
+    <h3 class="m-t-none m-b font-thin">Tambah Stok Baru</h3>
     <form role="form" name="form">
       <div class="row">
         <div class="form-group col-lg-9">
-          <label>Batch Name</label>
+          <label>Nama Batch</label>
           <input type="text" ng-model="item.batchName" class="form-control form-validation" ng-required="true" ui-focus="true">
         </div>
         <div class="form-group col-lg-3">
-          <label>Is a Active?</label>
+          <label>Aktif?</label>
           <div>
             <label class="i-switch bg-success m-t-xs m-r">
               <input type="checkbox" ng-model="item.active">
@@ -19,7 +19,7 @@
       </div>
       <div class="row">
         <div class="form-group col-lg-6">
-          <label>Stock Date</label>
+          <label>Tanggal Masuk</label>
           <div class="input-group w-md" ng-controller="DatepickerCtrl">
             <input name="dateStock" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateStock"
                    is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="form-group col-lg-6">
-          <label>Expiration Date</label>
+          <label>Kadaluarsa</label>
           <div class="input-group w-md" ng-controller="DatepickerCtrl">
             <input name="dateExpire" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateExpire"
                    is-open="opened" datepicker-options="dateOptions"  close-text="Close" ng-required="true" date-greater-than="item.dateStock" />
@@ -37,12 +37,12 @@
                 <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
           </div>
-          <small ng-show="form.dateExpire.$dirty && form.dateExpire.$error.dateGreaterThan" class="alert-danger">Expiration Date must greater than Stock Date</small>
+          <small ng-show="form.dateExpire.$dirty && form.dateExpire.$error.dateGreaterThan" class="alert-danger">Tanggal kadaluarsa harus lebih besar daripada tanggal masuk</small>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-lg-6">
-          <label>Amout</label>
+          <label>Jumlah Stok Masuk</label>
           <input type="number" ng-model="item.amountStart" class="form-control form-validation" placeholder="Number only.." ng-required="true">
         </div>
         <div class="form-group col-lg-6">

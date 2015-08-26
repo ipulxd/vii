@@ -1,8 +1,8 @@
 /**
  * Created by saiful.
  */
-app.controller('ProductIndexCtrl', ['$scope', 'Product', '$modal', 'toaster',
-  function($scope, Product, $modal, toaster) {
+app.controller('ProductIndexCtrl', ['$scope', 'Product', 'OrderMethod', '$modal', 'toaster',
+  function($scope, Product, OrderMethod, $modal, toaster) {
 
     //  pagination
     $scope.itemsByPage=10;
@@ -30,11 +30,11 @@ app.controller('ProductIndexCtrl', ['$scope', 'Product', '$modal', 'toaster',
             var index = $scope.products.indexOf(row);
             if (index !== -1) {
               $scope.products.splice(index, 1);
-              toaster.pop('success', '', 'Product deleted successfully');
+              toaster.pop('success', '', 'Produk berhasil dihapus');
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete product! You may need to remove product stocks and prices first');
+            toaster.pop('error', '', 'Produk gagal dihapus! Silakan cek dan hapus stok dan harga produk terlebih dahulu');
           }
         );
       });
@@ -51,11 +51,11 @@ app.controller('ProductNewCtrl', ['$scope', 'Product', '$state', 'toaster',
         {},
         $scope.product,
         function () {
-          toaster.pop('success', '', 'Product added successfully');
+          toaster.pop('success', '', 'Produk berhasil ditambahkan');
           $state.go('app.product.list');
         },
         function (error) {
-          toaster.pop('error', '', 'Failed to add a product!');
+          toaster.pop('error', '', 'Produk gagal ditambahkan!');
         }
       );
 
@@ -82,11 +82,11 @@ app.controller('ProductEditCtrl', ['$scope', 'Product', '$state', '$stateParams'
         { where: {id: $stateParams.id } },
         $scope.product,
         function () {
-          toaster.pop('success', '', 'Product updated successfully');
+          toaster.pop('success', '', 'Produk berhasil diperbarui');
           $state.go('app.product.list');
         },
         function (error) {
-          toaster.pop('error', '', 'Failed to update product!');
+          toaster.pop('error', '', 'Produk gagal diperbarui!');
         }
       );
 
@@ -94,9 +94,9 @@ app.controller('ProductEditCtrl', ['$scope', 'Product', '$state', '$stateParams'
 
   }]);
 
-app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
+app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', 'OrderMethod', '$state',
   '$stateParams', '$modal', 'toaster', '$filter',
-  function ($scope, Product, Currency, $state, $stateParams, $modal, toaster, $filter) {
+  function ($scope, Product, Currency, OrderMethod, $state, $stateParams, $modal, toaster, $filter) {
 
     //  pagination
     $scope.itemsByPage=10;
@@ -135,17 +135,26 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
     });
 
     // add price
-    $scope.addPrice = function () {
+    $scope.addPrice = function (type) {
       $scope.item = {};
       // default & product id
       $scope.item.name = 'Created at ' + moment().format('YYYY-MMMM-DD HH:mm:ss');
       $scope.item.active = true;
       // moment loaded from config no need dep inject
       $scope.item.dateFrom = moment().format('DD-MMMM-YYYY');
+      // tipe order
+      if (type) $scope.item.orderMethodName = type;
       // get currency
       Currency.find(function(result) {
         $scope.item.currencies = result;
       });
+      $scope.item.currencyCode = 'Rp'; // default select
+      // get-all order methods
+      OrderMethod.find(
+        function (result) {
+          $scope.item.orderMethods = result;
+        }
+      );
 
       var modalInstance = $modal.open({
         templateUrl: 'tpl/product/modal.form.price.html',
@@ -164,11 +173,11 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
           function (result) {
             $scope.productPrices.push(result);
             $scope.item = {};
-            toaster.pop('success', '', 'Price added successfully');
+            toaster.pop('success', '', 'Harga produk berhasil ditambahkan');
             $scope.getDefaultPrice();
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to add an price!');
+            toaster.pop('error', '', 'Harga produk gagal ditambahkan!');
           }
         );
       });
@@ -194,12 +203,12 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productPrices.indexOf(row);
             if (index !== -1) {
               $scope.productPrices.splice(index, 1);
-              toaster.pop('success', '', 'Item deleted successfully');
+              toaster.pop('success', '', 'Item berhasil dihapus');
               $scope.getDefaultPrice();
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete item!');
+            toaster.pop('error', '', 'Item gagal dihapus!');
           }
         );
       });
@@ -232,7 +241,7 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productPrices.indexOf(row);
             if (index !== -1) {
               $scope.productPrices[index].active = row.active;
-              toaster.pop('success', '', 'Price status updated');
+              toaster.pop('success', '', 'Status harga berhasil diperbarui');
               $scope.getDefaultPrice();
             }
           },
@@ -240,7 +249,7 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productPrices.indexOf(row);
             if (index !== -1) {
               $scope.productPrices[index].active = !row.active;
-              toaster.pop('error', '', 'Price status not updated!');
+              toaster.pop('error', '', 'Status harga gagal diperbarui!');
             }
           }
         );
@@ -307,11 +316,11 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
           function (result) {
             $scope.productStocks.push(result);
             $scope.item = {};
-            toaster.pop('success', '', 'Stock added successfully');
+            toaster.pop('success', '', 'Stok berhasil ditambahkan');
             $scope.getDefaultStock();
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to add an stock!');
+            toaster.pop('error', '', 'Stok gagal ditambahkan!');
           }
         );
       });
@@ -337,12 +346,12 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productStocks.indexOf(row);
             if (index !== -1) {
               $scope.productStocks.splice(index, 1);
-              toaster.pop('success', '', 'Item deleted successfully');
+              toaster.pop('success', '', 'Item berhasil dihapus');
               $scope.getDefaultStock();
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete item!');
+            toaster.pop('error', '', 'Item gagal dihapus!');
           }
         );
       });
@@ -375,7 +384,7 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productStocks.indexOf(row);
             if (index !== -1) {
               $scope.productStocks[index].active = row.active;
-              toaster.pop('success', '', 'Stock status updated');
+              toaster.pop('success', '', 'Stok status berhasil diperbarui');
               $scope.getDefaultStock();
             }
           },
@@ -383,7 +392,7 @@ app.controller('ProductDetailCtrl', ['$scope', 'Product', 'Currency', '$state',
             var index = $scope.productStocks.indexOf(row);
             if (index !== -1) {
               $scope.productStocks[index].active = !row.active;
-              toaster.pop('error', '', 'Stock status not updated!');
+              toaster.pop('error', '', 'Stok status gagal diperbarui!');
             }
           }
         );

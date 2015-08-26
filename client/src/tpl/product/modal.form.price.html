@@ -1,14 +1,32 @@
 <div class="modal-body wrapper-lg">
   <div class="row">
-    <h3 class="m-t-none m-b font-thin">Add new price</h3>
+    <h3 class="m-t-none m-b font-thin">Tambah harga baru</h3>
     <form role="form" name="form">
       <div class="row">
+        <div class="form-group col-lg-12">
+          <label>Jenis Order</label>
+          <div class="input-group">
+            <ui-select ng-model="item.orderMethodName" ng-required="true" class="form-validation">
+              <ui-select-match placeholder="Select..">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="ord.name as ord in item.orderMethods | filter: $select.search">
+                <div ng-bind-html="ord.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <div class="form-group col-lg-9">
-          <label>Price Name</label>
+          <label>Nama</label>
           <input type="text" ng-model="item.name" class="form-control form-validation" ng-required="true" ui-focus="true">
         </div>
         <div class="form-group col-lg-3">
-          <label>Is a Active?</label>
+          <label>Aktif</label>
           <div>
             <label class="i-switch bg-success m-t-xs m-r">
               <input type="checkbox" ng-model="item.active">
@@ -19,7 +37,7 @@
       </div>
       <div class="row">
         <div class="form-group col-lg-6">
-          <label>Start Date</label>
+          <label>Tanggal Awal</label>
           <div class="input-group w-md" ng-controller="DatepickerCtrl">
             <input name="dateFrom" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateFrom"
                    is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
@@ -29,7 +47,7 @@
           </div>
         </div>
         <div class="form-group col-lg-6">
-          <label>End Date</label>
+          <label>Tanggal Akhir</label>
           <div class="input-group w-md" ng-controller="DatepickerCtrl">
             <input name="dateTo" type="text" class="form-control form-validation" datepicker-popup="{{format}}" ng-model="item.dateTo"
                    is-open="opened" datepicker-options="dateOptions"  close-text="Close" ng-required="true" date-greater-than="item.dateFrom" />
@@ -42,11 +60,11 @@
       </div>
       <div class="row">
         <div class="form-group col-lg-6">
-          <label>Price Amount</label>
+          <label>Nilai</label>
           <input type="number" ng-model="item.amount" class="form-control form-validation" placeholder="Number only.." ng-required="true">
         </div>
         <div class="form-group col-lg-6">
-          <label>Currency</label>
+          <label>Mata Uang</label>
           <div class="input-group">
             <ui-select ng-model="item.currencyCode" ng-required="true" class="form-validation">
               <ui-select-match placeholder="Select currency..">{{$select.selected.name}}</ui-select-match>
@@ -64,7 +82,7 @@
       </div>
       <div class="row">
         <div class="form-group col-lg-12">
-          <label>Note</label>
+          <label>Catatan</label>
           <input type="text" ng-model="item.note" class="form-control form-validation">
         </div>
       </div>

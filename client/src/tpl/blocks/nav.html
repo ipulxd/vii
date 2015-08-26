@@ -23,7 +23,7 @@
           <span>Dashboard v1</span>
         </a>
       </li>
-      <li ui-sref-active="active">
+      <li ui-sref-active="active" ng-hide="true">
         <a ui-sref="app.dashboard-v2">
           <b class="label bg-info pull-right">N</b>
           <span>Dashboard v2</span>
@@ -39,10 +39,10 @@
     </a>
   </li>
 
-  <li ui-sref-active="active" is-allowed="OrderGroup:*">
-    <a ui-sref="app.ordergroup.list">
+  <li ui-sref-active="active" is-allowed="SOGroup:*">
+    <a ui-sref="app.sogroup.list">
       <i class="glyphicon glyphicon-tags icon text-success-dker"></i>
-      <span class="font-bold" translate="aside.nav.ORDERGROUP">Order Group</span>
+      <span class="font-bold" translate="aside.nav.SOGROUP">SO Group</span>
     </a>
   </li>
 
@@ -131,5 +131,5 @@
 </ul>
 <!-- / list -->
 <!-- libs -->
-<div ng-include="'tpl/blocks/nav_lib.html'" ng-show="(currentUser.role === 'SysEng')" ng-hide="true"></div>
+<div ng-include="'tpl/blocks/nav_lib.html'" ng-show="(currentUser.role === 'SysEng')"></div>
 <!-- / libs -->

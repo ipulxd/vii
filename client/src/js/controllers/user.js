@@ -48,7 +48,7 @@ app.controller('UserIndexCtrl', ['$scope', 'Person', 'VRoleMapping', '$modal', '
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete user!');
+            toaster.pop('error', '', 'Failed to delete user! User is still used in transactions');
           }
         );
       });
@@ -200,7 +200,7 @@ app.controller('UserEditCtrl', ['$scope', 'Person', 'VRole', 'VRoleMapping', '$m
 
   }]);
 
-
+// TODO: Test this password update controller
 app.controller('UserPasswdCtrl', ['$scope', 'Person', 'toaster', '$state', '$stateParams',
   function($scope, Person, toaster, $state, $stateParams) {
 

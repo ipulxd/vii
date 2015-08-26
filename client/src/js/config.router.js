@@ -92,36 +92,40 @@ angular.module('app')
           url: '/:id/detail',
           templateUrl: 'tpl/order/detail.html'
         })
+        .state('app.order.invoice', {
+          url: '/:id/invoice',
+          templateUrl: 'tpl/order/invoice.html'
+        })
 
-        .state('app.ordergroup', {
-          url: '/ordergroup',
+        .state('app.sogroup', {
+          url: '/sogroup',
           template: '<div ui-view></div>',
           resolve: {
             deps: ['$ocLazyLoad',
               function ($ocLazyLoad) {
                 return $ocLazyLoad.load(['smart-table', 'toaster', 'ui.select', 'textAngular']).then(
                   function () {
-                    return $ocLazyLoad.load('js/controllers/ordergroup.js');
+                    return $ocLazyLoad.load('js/controllers/sogroup.js');
                   }
                 )
               }]
           }
         })
-        .state('app.ordergroup.list', {
+        .state('app.sogroup.list', {
           url: '/list',
-          templateUrl: 'tpl/ordergroup/index.html'
+          templateUrl: 'tpl/sogroup/index.html'
         })
-        .state('app.ordergroup.new', {
+        .state('app.sogroup.new', {
           url: '/new',
-          templateUrl: 'tpl/ordergroup/new.html'
+          templateUrl: 'tpl/sogroup/new.html'
         })
-        .state('app.ordergroup.edit', {
+        .state('app.sogroup.edit', {
           url: '/:id/edit',
-          templateUrl: 'tpl/ordergroup/edit.html'
+          templateUrl: 'tpl/sogroup/edit.html'
         })
-        .state('app.ordergroup.detail', {
+        .state('app.sogroup.detail', {
           url: '/:id/detail',
-          templateUrl: 'tpl/ordergroup/detail.html'
+          templateUrl: 'tpl/sogroup/detail.html'
         })
 
         .state('app.customer', {
@@ -143,8 +147,12 @@ angular.module('app')
           templateUrl: 'tpl/customer/index.html'
         })
         .state('app.customer.new', {
-          url: '/new',
+          url: '/:type/new',
           templateUrl: 'tpl/customer/new.html'
+        })
+        .state('app.customer.newchild', {
+          url: '/:type/new/:id/child',
+          templateUrl: 'tpl/customer/newchild.html'
         })
         .state('app.customer.edit', {
           url: '/:id/edit',

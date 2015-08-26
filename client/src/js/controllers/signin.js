@@ -23,6 +23,7 @@ app.controller('SigninFormController', ['$rootScope', '$scope', 'AuthService', '
       // Try to login
       AuthService.login($scope.user.email, $scope.user.password)
       .then(function() {
+          AuthService.getCurrentUser();
           $state.go('app.dashboard-v1');
       }, function() {
           $scope.authError = 'Invalid email or password!';

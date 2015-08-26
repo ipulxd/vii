@@ -1,39 +1,63 @@
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3" >
     <i class="fa fa-user m-r-xs"></i>
-    Customer
+    Pelanggan
   </h1>
 </div>
 <div class="wrapper-md" ng-controller="CustomerIndexCtrl">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a ui-sref="app.customer.new" class="btn btn-sm btn-success">
-        <i class="glyphicon glyphicon-plus"></i> Add New Customer
-      </a>
+      <span ng-repeat="method in orderMethods">
+        <a ui-sref="app.customer.new({type:method.name})" class="btn btn-sm {{method.name==='Grosir'?'btn-primary':'btn-success'}}">
+          <i class="glyphicon glyphicon-plus"></i> Pelanggan {{method.name}}
+        </a>
+      </span>
     </div>
     <table st-table="displayCustomers" st-safe-src="customers" class="table table-striped">
       <thead>
       <tr>
-        <th st-sort="name">Name</th>
-        <th st-sort="address">Address</th>
-        <th st-sort="phone">Phone</th>
-        <th st-sort="contactPerson">Contact Person</th>
-        <th st-sort="mobilePhone">Mobile Phone</th>
-        <th st-sort="isGroup">Is Group</th>
+        <th st-sort="methodName">Tipe</th>
+        <th st-sort="name">Nama</th>
+        <th st-sort="address">Alamat</th>
+        <th st-sort="phone">Telp</th>
+        <th st-sort="isGroup">Group</th>
+        <th st-sort="active">Aktif</th>
         <th width="50"></th>
       </tr>
       <tr>
         <th>
-          <input st-search="'name'" placeholder="search name.." class="input-sm form-control" type="search"/>
-        </th>
-        <th colspan="2">
-          <input st-search="'addressCity'"  placeholder="search address.." class="input-sm form-control" type="search"/>
-        </th>
-        <th colspan="2">
-          <input st-search="'contactPerson'" placeholder="search contact.." class="input-sm form-control" type="search"/>
+          <select ng-model="sp.orderMethodName" class="input-sm form-control">
+            <option value="">All</option>
+            <option value="Grosir">Grosir</option>
+            <option value="Kanvas">Kanvas</option>
+          </select>
+          <input ng-hide="true" st-search="'orderMethodName'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
         <th>
-          <select ng-model="searchparam.isGroup" class="input-sm form-control">
+          <input ng-model="sp.name" placeholder="search.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Kanvas'"/>
+          <input ng-model="sp.name" placeholder="search pusat.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Grosir'"/>
+          <input ng-model="sp2.name" placeholder="search cabang.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Grosir'"/>
+        </th>
+        <th colspan="2">
+          <input ng-model="sp.addressCity" placeholder="search.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Kanvas'"/>
+          <input ng-model="sp.addressCity" placeholder="search pusat.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Grosir'"/>
+          <input ng-model="sp2.addressCity" placeholder="search cabang.." class="input-sm form-control" type="search"
+                 ng-show="sp.orderMethodName ==='Grosir'"/>
+        </th>
+        <th>
+          <select ng-model="sp.isGroup" class="input-sm form-control">
+            <option value="">All</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </th>
+        <th>
+          <select ng-model="sp.active" class="input-sm form-control">
             <option value="">All</option>
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -42,26 +66,64 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="row in displayCustomers | filter: searchparam">
-        <td>{{row.name}}</td>
-        <td>{{row.addressCity}}, {{row.addressProvince}}</td>
-        <td>{{row.phone}}</td>
-        <td>{{row.contactPerson}}</td>
-        <td>{{row.mobilePhone}}</td>
+      <tr ng-repeat-start="row in displayCustomers | filter: sp | filter: sp3">
         <td>
-          <span ng-if="row.isGroup" class="label bg-primary">Yes</span>
+          <span ng-if="row.orderMethodName==='Grosir'" class="label bg-primary">{{row.orderMethodName}}</span>
+          <span ng-if="row.orderMethodName==='Kanvas'" class="label bg-success">{{row.orderMethodName}}</span>
+          <span ng-if="(row.orderMethodName!=='Kanvas' && row.orderMethodName!=='Grosir')" class="label bg-light">{{row.orderMethodName}}</span>
+        </td>
+        <td>{{row.name}}</td>
+        <td>{{row.addressCity}}<span ng-show="row.addressCity && row.addressProvince">,</span> {{row.addressProvince}}</td>
+        <td>{{row.phone}}</td>
+        <td>
+          <span ng-if="row.isGroup" class="label bg-success">Yes</span>
           <span ng-if="!row.isGroup" class="label bg-light">No</span>
         </td>
+        <td>
+          <span ng-if="row.active" class="label bg-success">Yes</span>
+          <span ng-if="!row.active" class="label bg-light">No</span>
+        </td>
         <td style="white-space: nowrap">
-          <div class="buttons">
+          <div class="buttons pull-right">
+            <a ng-if="row.isGroup" ui-sref="app.customer.newchild({ type: row.orderMethodName, id: row.id })"
+               class="btn btn-xs btn-info" tooltip="Tambah cabang">
+              <i class="fa fa-plus"></i> cbg
+            </a>
             <a ui-sref="app.customer.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
-              <i class="fa fa-edit"></i>
+              <i class="fa fa-edit"></i> edit
             </a>
             <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
-              <i class="fa fa-times"></i>
+              <i class="fa fa-times"></i> del
             </a>
           </div>
         </td>
+      </tr>
+      <tr ng-repeat-end ng-if="row.childCustomers.length > 0" ng-repeat="child in row.childCustomers | filter: sp2 | filter: sp3">
+        <td>
+          <span ng-if="child.orderMethodName==='Grosir'" class="label bg-primary">{{child.orderMethodName}}</span>
+          <span ng-if="child.orderMethodName==='Kanvas'" class="label bg-success">{{child.orderMethodName}}</span>
+          <span ng-if="(child.orderMethodName!=='Kanvas' && child.orderMethodName!=='Grosir')" class="label bg-light">{{child.orderMethodName}}</span>
+        </td>
+        <td>&#8735; {{child.name}}</td>
+        <td>{{child.addressCity}}<span ng-show="child.addressCity && child.addressProvince">,</span> {{child.addressProvince}}</td>
+        <td>{{child.phone}}</td>
+        <td>
+          <span ng-if="child.isGroup" class="label bg-success">Yes</span>
+          <span ng-if="!child.isGroup" class="label bg-light">No</span>
+        </td>
+        <td>
+          <span ng-if="child.active" class="label bg-success">Yes</span>
+          <span ng-if="!child.active" class="label bg-light">No</span>
+        </td>
+        <td style="white-space: nowrap">
+          <div class="buttons pull-right">
+            <a ui-sref="app.customer.edit({ id: child.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i> edit
+            </a>
+            <a ng-click="removeChild(row,child)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
       </tr>
       </tbody>
       <tfoot>

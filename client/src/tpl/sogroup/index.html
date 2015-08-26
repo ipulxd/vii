@@ -1,0 +1,70 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3" >
+    <i class="fa fa-tags m-r-xs"></i>
+    SO Group
+  </h1>
+</div>
+<div class="wrapper-md" ng-controller="SOGroupIndexCtrl">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a ui-sref="app.sogroup.new" class="btn btn-sm btn-success">
+        <i class="glyphicon glyphicon-plus"></i> SO Group Baru
+      </a>
+    </div>
+    <table st-table="displaySOGroups" st-safe-src="soGroups" class="table table-striped">
+      <thead>
+      <tr>
+        <th st-sort="name">Nama</th>
+        <th st-sort="maxLimit">Max Limit</th>
+        <th st-sort="currencyCode">Mata Uang</th>
+        <th st-sort="note">Catatan</th>
+        <th width="15%"></th>
+      </tr>
+      <tr>
+        <th>
+          <input st-search="'name'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'maxLimit'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'currencyCode'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'note'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="row in displaySOGroups">
+        <td>{{row.name}}</td>
+        <td align="right">{{row.maxLimit | number}}</td>
+        <td>{{row.currencyCode}}</td>
+        <td>{{row.note}}</td>
+        <td style="white-space: nowrap">
+          <div class="buttons">
+            <a ui-sref="app.sogroup.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail SO Group" ng-hide="true">
+              <i class="fa fa-folder-open-o"></i> detail
+            </a>
+            <a ui-sref="app.sogroup.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
+              <i class="fa fa-edit"></i> edit
+            </a>
+            <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
+              <i class="fa fa-times"></i> del
+            </a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

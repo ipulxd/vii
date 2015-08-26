@@ -1,4 +1,4 @@
-<div class="bg-light lter b-b wrapper-md">
+<div class="bg-light lter b-b wrapper-md hidden-print">
   <div class="row-fluid">
     <div class="col-10">
       <h1 class="m-n font-thin h3">Order Details</h1>
@@ -10,18 +10,19 @@
     </div>
   </div>
 </div>
-<div class="wrapper-md" ng-controller="OrderDetailCtrl">
+<div class="wrapper-md hidden-print" ng-controller="OrderDetailCtrl">
   <div class="panel panel-default">
     <div class="panel-heading">
       <div class="row">
-        <div class="col-md-11 h4">
+        <div class="col-md-10 h4">
           Customer: <strong>{{order.customer.name}}</strong>
         </div>
-        <div class="col-md-1 pull-right">
-          <a ui-sref="app.order.edit({id:order.id})" class="btn btn-xs btn-success">
-            <i class="fa fa-edit"></i> Edit
-          </a>
-        </div>
+        <a ui-sref="app.order.edit({id:order.id})" class="btn btn-xs btn-success pull-right m-r-md">
+          <i class="fa fa-edit"></i> Edit
+        </a>
+        <a ng-click="orderInvoice()" class="btn btn-xs btn-primary pull-right m-r-xs">
+          <i class="fa fa-file-o"></i> Invoice
+        </a>
       </div>
     </div>
     <div class="row wrapper-sm">

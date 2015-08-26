@@ -1,29 +1,33 @@
-<div class="panel panel-default">
+<div class="panel panel-default m-b-n-xxs">
   <div class="panel-heading">
-    <button type="button" class="btn btn-sm btn-success m-r-sm" ng-click="addPrice()">
-      <i class="glyphicon glyphicon-plus"></i> Add new
+    <button type="button" class="btn btn-sm btn-primary m-r-sm" ng-click="addPrice('Grosir')">
+      <i class="glyphicon glyphicon-plus"></i> Harga Grosir
+    </button>
+    <button type="button" class="btn btn-sm btn-success m-r-sm" ng-click="addPrice('Kanvas')">
+      <i class="glyphicon glyphicon-plus"></i> Harga Kanvas
     </button>
     <div class="m-t-xs pull-right">
       <span ng-hide="!currentPrice" class="text-info-dker">
         <i class="fa fa-lightbulb-o"></i>
-        Default price will be used is <strong>{{currentPrice.amount | number}} [{{currentPrice.currencyCode}}]</strong>
-        from {{currentPrice.dateFrom | date : "dd-MMM-yyyy"}} to {{currentPrice.dateTo | date : "dd-MMM-yyyy"}}
+        Harga default <strong>{{currentPrice.amount | number}} [{{currentPrice.currencyCode}}]</strong>
+        berlaku dari {{currentPrice.dateFrom | date : "dd-MMM-yyyy"}} sampai {{currentPrice.dateTo | date : "dd-MMM-yyyy"}}
       </span>
       <span ng-hide="currentPrice" class="text-danger">
         <i class="fa fa-warning"></i>
-        No active price for this product at this moment!
+        Tidak ada harga aktif saat ini!
       </span>
     </div>
   </div>
   <table st-table="displayProductPrices" st-safe-src="productPrices" class="table table-striped">
     <thead>
     <tr>
-      <th st-sort="name">Name</th>
-      <th st-sort="dateFrom">Start Date</th>
-      <th st-sort="dateTo">End Date</th>
-      <th st-sort="amount">Amount</th>
-      <th st-sort="currencyCode">Currency</th>
-      <th st-sort="active" width="15%">Is Active?</th>
+      <th st-sort="name">Nama</th>
+      <th st-sort="dateFrom">Tanggal Awal</th>
+      <th st-sort="dateTo">Tanggal Akhir</th>
+      <th st-sort="amount">Nilai</th>
+      <th st-sort="currencyCode">Mata Uang</th>
+      <th st-sort="orderMethodName" width="10%">Jenis</th>
+      <th st-sort="active" width="13%">Aktif</th>
       <th></th>
     </tr>
     <tr>
@@ -43,6 +47,13 @@
         <input st-search="'currencyCode'" class="input-sm form-control" type="search"/>
       </th>
       <th>
+        <select ng-model="searchparam.orderMethodName" class="input-sm form-control">
+          <option value="">All</option>
+          <option value="Grosir">Grosir</option>
+          <option value="Kanvas">Kanvas</option>
+        </select>
+      </th>
+      <th>
         <select ng-model="searchparam.active" class="input-sm form-control">
           <option value="">All</option>
           <option value="true">Yes</option>
@@ -59,11 +70,16 @@
       <td class="text-right">{{row.amount | currency:""}}</td>
       <td>{{row.currencyCode}}</td>
       <td>
+        <span ng-if="row.orderMethodName==='Grosir'" class="label bg-primary">Grosir</span>
+        <span ng-if="row.orderMethodName==='Kanvas'" class="label bg-success">Kanvas</span>
+        <span ng-if="(row.orderMethodName!=='Grosir' && row.orderMethodName!=='Kanvas')" class="label bg-light">{{row.orderMethodName}}</span>
+      </td>
+      <td>
         <a ng-click="togglePriceStatus(row)">
-          <span ng-if="row.active" class="label bg-primary">Yes</span>
+          <span ng-if="row.active" class="label bg-success">Yes</span>
           <span ng-if="!row.active" class="label bg-light">No</span>
         </a>
-        <span ng-if="(row.id===currentPrice.id)" class="label bg-success">Default</span>
+        <span ng-if="(row.id===currentPrice.id)" class="label bg-info">Default</span>
       </td>
       <td style="white-space: nowrap">
         <div class="buttons">

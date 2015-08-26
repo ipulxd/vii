@@ -90,19 +90,19 @@
       },
       "_selectable": false
     },
-    "orderGroupId": {
+    "soNumberId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 32,
       "scale": 0,
       "postgresql": {
-        "columnName": "t_order_group_id",
+        "columnName": "t_so_number_id",
         "dataType": "integer",
         "dataLength": null,
         "dataPrecision": 32,
         "dataScale": 0,
-        "nullable": "YES"
+        "nullable": "NO"
       },
       "_selectable": true
     },
@@ -154,6 +154,38 @@
       },
       "_selectable": false
     },
+    "orderAmount": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 20,
+      "scale": 2,
+      "postgresql": {
+        "columnName": "order_amount",
+        "dataType": "numeric",
+        "dataLength": null,
+        "dataPrecision": 20,
+        "dataScale": 2,
+        "nullable": "NO"
+      },
+      "_selectable": false
+    },
+    "currencyCode": {
+      "type": "String",
+      "required": true,
+      "length": 5,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "t_currency_code",
+        "dataType": "character varying",
+        "dataLength": 5,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "NO"
+      },
+      "_selectable": true
+    },
     "id": {
       "type": "Number",
       "id": true,
@@ -174,10 +206,10 @@
   },
   "validations": [],
   "relations": {
-    "orderGroup": {
+    "soNumber": {
       "type": "belongsTo",
-      "model": "OrderGroup",
-      "foreignKey": "orderGroupId"
+      "model": "SONumber",
+      "foreignKey": "soNumberId"
     },
     "orderItems": {
       "type": "hasMany",

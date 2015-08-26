@@ -2,12 +2,12 @@
   <div class="row">
     <h3 class="m-t-none m-b font-thin text-danger">
       <i class="fa fa-warning"></i>
-      Delete Price
+      Delete Harga
     </h3>
     <form role="form">
       <div class="form-group">
-        <p>Are you sure want to delete this price: <strong>{{item.amount | number}} [{{item.currencyCode}}]</strong>?</p>
-        <p>Valid for {{item.dateFrom | date : "dd-MMM-yyyy"}} to {{item.dateTo | date : "dd-MMM-yyyy"}}</p>
+        <p>Apakah anda yakin akan menghapus harga: <strong>{{item.amount | number}} [{{item.currencyCode}}]</strong>?</p>
+        <p>Berlaku mulai {{item.dateFrom | date : "dd-MMM-yyyy"}} sampai dengan {{item.dateTo | date : "dd-MMM-yyyy"}}</p>
         <small ng-hide="!item.note">{{item.note}}</small>
       </div>
       <div class="checkbox m-t-lg">

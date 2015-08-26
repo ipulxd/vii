@@ -1,26 +1,26 @@
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3" >
     <i class="fa fa-gift m-r-xs"></i>
-    Product
+    Produk
   </h1>
 </div>
 <div class="wrapper-md" ng-controller="ProductIndexCtrl">
   <div class="panel panel-default">
     <div class="panel-heading">
       <a ui-sref="app.product.new" class="btn btn-sm btn-success">
-        <i class="glyphicon glyphicon-plus"></i> Add New Product
+        <i class="glyphicon glyphicon-plus"></i> Tambah Produk
       </a>
     </div>
     <table st-table="displayProducts" st-safe-src="products" class="table table-striped">
       <thead>
       <tr>
-        <th st-sort="name">Name</th>
-        <th st-sort="active" width="15%">Is Active?</th>
+        <th st-sort="name">Nama</th>
+        <th st-sort="active" width="15%">Aktif</th>
         <th width="15%"></th>
       </tr>
       <tr>
         <th>
-          <input st-search="'name'" placeholder="search name.." class="input-sm form-control" type="search"/>
+          <input st-search="'name'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
         <th>
           <select ng-model="searchparam.active" class="input-sm form-control">
@@ -39,12 +39,12 @@
           </a>
         </td>
         <td>
-          <span ng-if="row.active" class="label bg-primary">Yes</span>
+          <span ng-if="row.active" class="label bg-success">Yes</span>
           <span ng-if="!row.active" class="label bg-light">No</span>
         </td>
         <td style="white-space: nowrap">
           <div class="buttons">
-            <a ui-sref="app.product.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail: Stock, Price">
+            <a ui-sref="app.product.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail: Stok, Harga">
               <i class="fa fa-folder-open-o"></i> detail
             </a>
             <a ui-sref="app.product.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">

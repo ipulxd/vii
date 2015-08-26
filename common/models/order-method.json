@@ -34,6 +34,16 @@
       "type": "hasMany",
       "model": "Order",
       "foreignKey": "orderMethodName"
+    },
+    "customers": {
+      "type": "hasMany",
+      "model": "Customer",
+      "foreignKey": "orderMethodName"
+    },
+    "productPrices": {
+      "type": "hasMany",
+      "model": "ProductPrice",
+      "foreignKey": "orderMethodName"
     }
   },
   "acls": [

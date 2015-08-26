@@ -18,7 +18,7 @@ var paymentMethods = [
 ];
 
 var currencies = [
-  {code: 'IDR', name: 'Rupiah'}
+  {code: 'Rp', name: 'Rupiah'}
 ];
 
 var c1 = orderMethods.length;

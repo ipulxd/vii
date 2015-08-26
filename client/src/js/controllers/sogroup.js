@@ -1,38 +1,38 @@
 /**
  * Created by saiful.
  */
-app.controller('OrderGroupIndexCtrl', ['$scope', 'OrderGroup', '$modal', 'toaster',
-  function($scope, OrderGroup, $modal, toaster) {
+app.controller('SOGroupIndexCtrl', ['$scope', 'SOGroup', '$modal', 'toaster',
+  function($scope, SOGroup, $modal, toaster) {
 
     //  pagination
     $scope.itemsByPage=10;
 
     // index
-    $scope.orderGroups = [];
-    OrderGroup.find({
-        filter: {
-          include: {
-            relation: 'orders',
-            scope: {
-              include: {
-                relation: 'customer',
-                scope: {
-                  fields: ['name']
-                }
-              }
-            }
-          }
-        }
+    $scope.soGroups = [];
+    SOGroup.find({
+        //filter: {
+        //  include: {
+        //    relation: 'orders',
+        //    scope: {
+        //      include: {
+        //        relation: 'customer',
+        //        scope: {
+        //          fields: ['name']
+        //        }
+        //      }
+        //    }
+        //  }
+        //}
       }, function (result) {
-      $scope.orderGroups = result;
-      $scope.displayOrderGroups = [].concat($scope.orderGroups);
+      $scope.soGroups = result;
+      $scope.displaySOGroups = [].concat($scope.soGroups);
     });
 
     // remove
     $scope.remove = function (row) {
       var modalInstance = $modal.open({
-        templateUrl: 'tpl/ordergroup/modal.delete.html',
-        controller: 'OrderGroupModalInstanceCtrl',
+        templateUrl: 'tpl/sogroup/modal.delete.html',
+        controller: 'SOGroupModalInstanceCtrl',
         size: 'lg',
         resolve: {
           item: function () {
@@ -41,17 +41,17 @@ app.controller('OrderGroupIndexCtrl', ['$scope', 'OrderGroup', '$modal', 'toaste
         }
       });
       modalInstance.result.then(function () {
-        OrderGroup.deleteById(
+        SOGroup.deleteById(
           { id: row.id },
           function () {
-            var index = $scope.orderGroups.indexOf(row);
+            var index = $scope.soGroups.indexOf(row);
             if (index !== -1) {
-              $scope.orderGroups.splice(index, 1);
-              toaster.pop('success', '', 'Order group deleted successfully');
+              $scope.soGroups.splice(index, 1);
+              toaster.pop('success', '', 'SO Group berhasil dihapus');
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete order group! You might need to ungroup related orders first');
+            toaster.pop('error', '', 'SO Group gagal dihapus! Silakan hapus order terkait terlebih dahulu');
           }
         );
       });
@@ -59,81 +59,65 @@ app.controller('OrderGroupIndexCtrl', ['$scope', 'OrderGroup', '$modal', 'toaste
 
   }]);
 
-app.controller('OrderGroupNewCtrl', ['$scope', 'OrderGroup', 'Order','$state', 'toaster',
-  function ($scope, OrderGroup, Order, $state, toaster) {
+app.controller('SOGroupNewCtrl', ['$scope', '$rootScope', 'SOGroup', 'Currency', '$state', 'toaster',
+  function ($scope, $rootScope, SOGroup, Currency, $state, toaster) {
 
     // init
-    $scope.orderGroup = new OrderGroup();
+    $scope.soGroup = new SOGroup();
 
-    // find all order which not belong to any group
-    $scope.availableOrders = [];
-    $scope.orderGroup.selectedOrders = [];
-    Order.find({
-      filter: {
-        include: {
-          relation: 'customer',
-          scope: {
-            fields: ['name']
-          }
-        },
-        where: {
-          or: [{orderGroupId: null}, {orderGroupId: ''}]
-        }
+    Currency.find(
+      function (result) {
+        $scope.soGroup.currencies = result;
+        $scope.soGroup.currencyCode = 'Rp';
       }
-    }, function (result) {
-      $scope.availableOrders = result;
-    });
+    );
 
-    $scope.addOrderGroup = function () {
-      OrderGroup.create(
+    $scope.soGroup.maxLimit = 600000000;
+
+    $scope.addSOGroup = function () {
+      // Get user id
+      $scope.soGroup.personId = $rootScope.currentUser.id;
+      SOGroup.create(
         {},
-        $scope.orderGroup,
+        $scope.soGroup,
         function (result) {
-          if ($scope.orderGroup.selectedOrders.length) {
-            // Update order
-            Order.update({
-                where: {id: {inq: $scope.orderGroup.selectedOrders}}
-              },
-              { orderGroupId: result.id },
-              function () {
-                toaster.pop('success', '', 'Order Group '+result.name+' added successfully, with '+
-                  $scope.orderGroup.selectedOrders.length+' member');
-              },
-              function () {
-                toaster.pop('error', '', 'Failed to add a order group!');
-              }
-            );
-          } else {
-            toaster.pop('success', '', 'Order Group '+result.name+' added successfully.');
-          }
-          $state.go('app.ordergroup.list');
+          toaster.pop('success', '', 'SO Group '+result.name+' berhasil ditambahkan.');
+          $state.go('app.sogroup.list');
         },
         function (error) {
-          toaster.pop('error', '', 'Failed to add a order group!');
+          toaster.pop('error', '', 'SO Group gagal ditambahkan!');
         }
       );
     };
 
   }]);
 
-app.controller('OrderGroupEditCtrl', ['$scope', 'OrderGroup', '$state', '$stateParams', 'toaster',
-  function ($scope, OrderGroup, $state, $stateParams, toaster) {
+app.controller('SOGroupEditCtrl', ['$scope', 'SOGroup', 'Currency', '$state', '$stateParams', 'toaster',
+  function ($scope, SOGroup, Currency, $state, $stateParams, toaster) {
 
-    // can noly edit name and note
-    // get current order group
-    $scope.orderGroup = OrderGroup.findById( { id: $stateParams.id } );
+    // get current so group
+    SOGroup.findById({ id: $stateParams.id }, function (result) {
+      $scope.soGroup = result;
+      $scope.soGroup.maxLimit = Number(result.maxLimit);
+    });
+
+    Currency.find(
+      function (result) {
+        $scope.soGroup.currencies = result;
+      }
+    );
 
     // update
-    $scope.updateOrderGroup = function () {
-      OrderGroup.update(
+    $scope.updateSOGroup = function () {
+      SOGroup.update(
         { where: {id: $stateParams.id } },
-        $scope.orderGroup,
+        $scope.soGroup,
         function () {
-          toaster.pop('success', '', 'Order group updated successfully');
-          $state.go('app.ordergroup.list');
+          toaster.pop('success', '', 'SO Group berhasil diperbarui');
+          $state.go('app.sogroup.list');
         },
         function (error) {
-          toaster.pop('error', '', 'Failed to update order group!');
+          toaster.pop('error', '', 'SO Group gagal diperbarui!');
         }
       );
     };
@@ -265,7 +249,7 @@ app.controller('OrderGroupDetailCtrl', ['$scope', 'Order', 'OrderGroup', '$state
     };
   }]);
 
-app.controller('OrderGroupModalInstanceCtrl', ['$scope', '$modalInstance', 'item',
+app.controller('SOGroupModalInstanceCtrl', ['$scope', '$modalInstance', 'item',
   function($scope, $modalInstance, item) {
     $scope.item = item;
 

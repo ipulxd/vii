@@ -141,7 +141,7 @@
     },
     "currencyCode": {
       "type": "String",
-      "required": false,
+      "required": true,
       "length": 5,
       "precision": null,
       "scale": null,
@@ -151,7 +151,7 @@
         "dataLength": 5,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "YES"
+        "nullable": "NO"
       },
       "_selectable": true
     },

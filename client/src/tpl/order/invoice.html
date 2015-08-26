@@ -1,0 +1,92 @@
+<div class="bg-light lter b-b wrapper-md hidden-print">
+  <a href class="btn btn-sm btn-info pull-right" onClick="window.print();">Print</a>
+  <h1 class="m-n font-thin h3">Invoice #{{item.order.id}} : {{item.order.customer.name}}</h1>
+</div>
+<div class="wrapper-md">
+  <div class="m-n font-thin h2">Invoice #{{item.order.id}}</div>
+  <div>
+    <div class="h4 m-t-xs">PT. Panganmas Inti Persada</div>
+    <p>
+      Jl. Laut Jawa, Cilacap, Jawa Tengah <br>
+      Phone: +62 282 533720 <br>
+      Email: sales@panganmas.co.id | URL: http://panganmas.co.id/product
+    </p>
+  </div>
+  <div>
+    <div class="well m-t bg-light lt">
+      <div class="row">
+        <div class="col-xs-6">
+          <strong>KEPADA:</strong>
+          <h4>{{item.order.customer.name}}</h4>
+          <p>
+            {{item.order.customer.addressStreet}}<br>
+            {{item.order.customer.addressCity}}
+            {{item.order.customer.addressProvince}}
+            {{item.order.customer.postalCode}}<br>
+            <span ng-show="item.order.customer.fax">Fax:</span> {{item.order.customer.fax}}<br>
+            <span ng-show="item.order.customer.phone">Telp:</span> {{item.order.customer.phone}}<br>
+            <span ng-show="item.order.customer.email">Email:</span> {{item.order.customer.email}}<br>
+          </p>
+        </div>
+        <div class="col-xs-6">
+          <strong>DETAIL:</strong>
+          <table>
+            <tr>
+              <td>Tipe </td><td>: <strong>{{item.order.orderMethodName}}</strong></td>
+            </tr>
+            <tr>
+              <td>Tanggal Order </td><td>: {{item.order.datePurchase | date : "dd-MMM-yyyy"}}</td>
+            </tr>
+            <tr>
+              <td>Cara Bayar </td><td>: {{item.order.paymentMethodName}}</td>
+            </tr>
+            <tr>
+              <td>Tanggal Bayar </td><td>: {{item.order.datePayment | date : "dd-MMM-yyyy"}}</td>
+            </tr>
+            <tr>
+              <td>Tanggal Kirim </td><td>: {{item.order.dateDelivery | date : "dd-MMM-yyyy"}}</td>
+            </tr>
+            <tr ng-show="item.order.orderGroup.name">
+              <td>Order Group </td><td>: {{item.order.orderGroup.name}}</td>
+            </tr>
+            <tr>
+              <td>Sales </td><td>: {{item.order.person.firstname}} {{item.order.person.lastname}}</td>
+            </tr>
+            <tr ng-show="item.order.note">
+              <td colspan="2">Note : {{item.order.note}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="line"></div>
+    <table class="table table-striped bg-white b-a">
+      <thead>
+        <tr>
+          <th style="width: 60px">QTY</th>
+          <th>DESCRIPTION</th>
+          <th style="width: 140px">UNIT PRICE</th>
+          <th style="width: 90px">TOTAL</th>
+          <th style="width:70px">CRC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="row in item.displayOrderItems">
+          <td class="text-right">{{row.quantity | number}}</td>
+          <td>{{row.productName}}</td>
+          <td class="text-right">{{row.priceEach | number}}</td>
+          <td class="text-right">{{row.priceTotal | number}}</td>
+          <td>{{row.currencyCode}}</td>
+        </tr>
+        <tr ng-repeat="(cur, amount) in item.order.totalPrice">
+          <td colspan="3" class="text-right no-border"><strong>Total</strong></td>
+          <td><strong>{{amount | number}}</strong></td>
+          <td>{{cur}} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
