@@ -74,6 +74,22 @@
       },
       "_selectable": true
     },
+    "orderBy": {
+      "type": "String",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "postgresql": {
+        "columnName": "order_by",
+        "dataType": "text",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "YES"
+      },
+      "_selectable": true
+    },
     "customerId": {
       "type": "Number",
       "required": true,
@@ -189,6 +205,7 @@
     "id": {
       "type": "Number",
       "id": true,
+      "generated": true,
       "required": false,
       "length": null,
       "precision": 32,

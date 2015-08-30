@@ -2,14 +2,14 @@
   <div class="row">
     <h3 class="m-t-none m-b font-thin text-danger">
       <i class="fa fa-warning"></i>
-      Delete order?
+      Hapus Order?
     </h3>
     <form role="form">
       <div class="form-group">
-        <p>Are you sure want to delete order from <strong>{{item.customerName}}</strong>?</p>
-        <span class="col-sm-2">Purchase Date:</span><p>{{item.datePurchase | date : "dd-MMM-yyyy"}}</p>
-        <span class="col-sm-2">Order Method:</span><p>{{item.orderMethodName}}</p>
-        <span class="col-sm-2">Payment Method:</span><p>{{item.paymentMethodName}}</p>
+        <p>Apakah anda yakin akan menghapus order dari <strong>{{item.customerName}}</strong>?</p>
+        <span class="col-sm-2">Tipe:</span><p>{{item.orderMethodName}}</p>
+        <span class="col-sm-2">Tanggal Order:</span><p>{{item.datePurchase | date : "dd-MMM-yyyy"}}</p>
+        <span class="col-sm-2">Senilai:</span><p>{{item.orderAmount | number}} {{item.currencyCode}}</p>
       </div>
       <div class="checkbox m-t-lg">
         <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()">

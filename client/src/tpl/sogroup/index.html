@@ -7,22 +7,38 @@
 <div class="wrapper-md" ng-controller="SOGroupIndexCtrl">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a ui-sref="app.sogroup.new" class="btn btn-sm btn-success">
-        <i class="glyphicon glyphicon-plus"></i> SO Group Baru
-      </a>
+      <span ng-repeat="method in orderMethods">
+        <a ui-sref="app.sogroup.new({type:method.name})" class="btn btn-sm {{method.name==='Grosir'?'btn-primary':'btn-success'}}">
+          <i class="glyphicon glyphicon-plus"></i> SO Group {{method.name}}
+        </a>
+      </span>
     </div>
     <table st-table="displaySOGroups" st-safe-src="soGroups" class="table table-striped">
       <thead>
       <tr>
+        <th st-sort="orderMethodName">Tipe</th>
         <th st-sort="name">Nama</th>
+        <th st-sort="amountYear">Tahun Terakhir</th>
+        <th st-sort="amountCurrent">Total Nilai</th>
         <th st-sort="maxLimit">Max Limit</th>
         <th st-sort="currencyCode">Mata Uang</th>
-        <th st-sort="note">Catatan</th>
         <th width="15%"></th>
       </tr>
       <tr>
         <th>
+          <select ng-model="sp.orderMethodName" class="input-sm form-control">
+            <option value="">All</option>
+            <option ng-repeat="m in orderMethods" value="{{m.name}}">{{m.name}}</option>
+          </select>
+        </th>
+        <th>
           <input st-search="'name'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'amountYear'" placeholder="search.." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+          <input st-search="'amountCurrent'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
         <th>
           <input st-search="'maxLimit'" placeholder="search.." class="input-sm form-control" type="search"/>
@@ -31,18 +47,21 @@
           <input st-search="'currencyCode'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
         <th>
-          <input st-search="'note'" placeholder="search.." class="input-sm form-control" type="search"/>
-        </th>
-        <th>
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="row in displaySOGroups">
+      <tr ng-repeat="row in displaySOGroups | filter: sp">
+        <td>
+          <span ng-if="row.orderMethodName==='Grosir'" class="label bg-primary">{{row.orderMethodName}}</span>
+          <span ng-if="row.orderMethodName==='Kanvas'" class="label bg-success">{{row.orderMethodName}}</span>
+          <span ng-if="(row.orderMethodName!=='Kanvas' && row.orderMethodName!=='Grosir')" class="label bg-light">{{row.orderMethodName}}</span>
+        </td>
         <td>{{row.name}}</td>
+        <td align="right">{{row.amountYear}}</td>
+        <td align="right">{{row.amountCurrent | number}}</td>
         <td align="right">{{row.maxLimit | number}}</td>
         <td>{{row.currencyCode}}</td>
-        <td>{{row.note}}</td>
         <td style="white-space: nowrap">
           <div class="buttons">
             <a ui-sref="app.sogroup.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail SO Group" ng-hide="true">

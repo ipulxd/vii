@@ -81,11 +81,11 @@ angular.module('app')
           templateUrl: 'tpl/order/index.html'
         })
         .state('app.order.new', {
-          url: '/new',
+          url: '/:type/new',
           templateUrl: 'tpl/order/new.html'
         })
         .state('app.order.edit', {
-          url: '/:id/edit',
+          url: '/:type/order/:id/edit',
           templateUrl: 'tpl/order/edit.html'
         })
         .state('app.order.detail', {
@@ -116,7 +116,7 @@ angular.module('app')
           templateUrl: 'tpl/sogroup/index.html'
         })
         .state('app.sogroup.new', {
-          url: '/new',
+          url: '/:type/new',
           templateUrl: 'tpl/sogroup/new.html'
         })
         .state('app.sogroup.edit', {

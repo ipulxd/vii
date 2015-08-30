@@ -7,22 +7,30 @@
 <div class="wrapper-md" ng-controller="OrderIndexCtrl">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a ui-sref="app.order.new" class="btn btn-sm btn-success">
-        <i class="glyphicon glyphicon-plus"></i> Add New Order
-      </a>
+      <span ng-repeat="method in orderMethods">
+        <a ui-sref="app.order.new({type:method.name})" class="btn btn-sm {{method.name==='Grosir'?'btn-primary':'btn-success'}}">
+          <i class="glyphicon glyphicon-plus"></i> Order {{method.name}}
+        </a>
+      </span>
     </div>
     <table st-table="displayOrders" st-safe-src="orders" class="table table-striped">
       <thead>
       <tr>
-        <th st-sort="customerName">Customer</th>
-        <th st-sort="datePurchase">Purchase Date</th>
-        <th st-sort="datePayment">Payment Date</th>
-        <th st-sort="dateDelivery">Delivery Date</th>
-        <th st-sort="orderMethodName">Order Method</th>
-        <th st-sort="paymentMethodName">Payment Method</th>
+        <th st-sort="orderMethodName">Tipe</th>
+        <th st-sort="customerName">Pelanggan</th>
+        <th st-sort="datePurchase">Tgl Order</th>
+        <th st-sort="dateDelivery">Tgl Kirim</th>
+        <th st-sort="datePayment">Tgl Bayar</th>
+        <th st-sort="orderAmount">Nilai</th>
         <th width="15%"></th>
       </tr>
       <tr>
+        <th>
+          <select ng-model="sp.orderMethodName" class="input-sm form-control">
+            <option value="">All</option>
+            <option ng-repeat="m in orderMethods" value="{{m.name}}">{{m.name}}</option>
+          </select>
+        </th>
         <th>
           <input st-search="'customerName'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
@@ -30,34 +38,35 @@
           <input st-search="'datePurchase'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
         </th>
         <th>
-          <input st-search="'datePayment'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
-        </th>
-        <th>
           <input st-search="'dateDelivery'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
         </th>
         <th>
-          <input st-search="'orderMethodName'" placeholder="search.." class="input-sm form-control" type="search"/>
+          <input st-search="'datePayment'" placeholder="YYYY-MM-DD" class="input-sm form-control" type="date"/>
         </th>
         <th>
-          <input st-search="'paymentMethodName'" placeholder="search.." class="input-sm form-control" type="search"/>
+          <input st-search="'orderAmount'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="row in displayOrders">
+      <tr ng-repeat="row in displayOrders | filter: sp">
+        <td>
+          <span ng-if="row.orderMethodName==='Grosir'" class="label bg-primary">{{row.orderMethodName}}</span>
+          <span ng-if="row.orderMethodName==='Kanvas'" class="label bg-success">{{row.orderMethodName}}</span>
+          <span ng-if="(row.orderMethodName!=='Kanvas' && row.orderMethodName!=='Grosir')" class="label bg-light">{{row.orderMethodName}}</span>
+        </td>
         <td>{{row.customerName}}</td>
         <td>{{row.datePurchase | date : "dd-MMM-yyyy"}}</td>
-        <td>{{row.datePayment | date : "dd-MMM-yyyy"}}</td>
         <td>{{row.dateDelivery | date : "dd-MMM-yyyy"}}</td>
-        <td>{{row.orderMethodName}}</td>
-        <td>{{row.paymentMethodName}}</td>
+        <td>{{row.datePayment | date : "dd-MMM-yyyy"}}</td>
+        <td class="text-right">{{row.orderAmount | number}} ({{row.currencyCode}})</td>
         <td style="white-space: nowrap">
           <div class="buttons">
             <a ui-sref="app.order.detail({ id: row.id })" class="btn btn-xs btn-info" tooltip="Detail: Order items">
               <i class="fa fa-folder-open-o"></i> detail
             </a>
-            <a ui-sref="app.order.edit({ id: row.id })" class="btn btn-xs btn-success" tooltip="Edit">
-              <i class="fa fa-edit"></i> edit
+            <a ui-sref="app.order.edit({ id: row.id, type: row.orderMethodName})" class="btn btn-xs btn-success" tooltip="Edit Metadata">
+              <i class="fa fa-edit"></i> meta
             </a>
             <a ng-click="remove(row)" class="btn btn-xs btn-danger" tooltip="Delete">
               <i class="fa fa-times"></i> del

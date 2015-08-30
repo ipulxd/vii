@@ -1,30 +1,35 @@
 /**
  * Created by saiful.
  */
-app.controller('SOGroupIndexCtrl', ['$scope', 'SOGroup', '$modal', 'toaster',
-  function($scope, SOGroup, $modal, toaster) {
+app.controller('SOGroupIndexCtrl', ['$scope', 'SOGroup', 'OrderMethod','$modal', 'toaster',
+  function($scope, SOGroup, OrderMethod, $modal, toaster) {
 
     //  pagination
     $scope.itemsByPage=10;
 
+    $scope.orderMethods = OrderMethod.find();
+
     // index
     $scope.soGroups = [];
     SOGroup.find({
-        //filter: {
-        //  include: {
-        //    relation: 'orders',
-        //    scope: {
-        //      include: {
-        //        relation: 'customer',
-        //        scope: {
-        //          fields: ['name']
-        //        }
-        //      }
-        //    }
-        //  }
-        //}
+        filter: {
+          include: {
+            relation: 'soGroupValues',
+            scope: {
+              order: ['year DESC']
+            }
+          }
+        }
       }, function (result) {
-      $scope.soGroups = result;
+      angular.forEach(result, function (group, key) {
+        if (group.soGroupValues.length > 0) {
+          group.amountYear = group.soGroupValues[0].year;
+          group.amountCurrent = group.soGroupValues[0].currentValue;
+        }
+        $scope.soGroups.push(group);
+      });
+      //console.log(result);
+      //$scope.soGroups = result;
       $scope.displaySOGroups = [].concat($scope.soGroups);
     });
 
@@ -59,11 +64,13 @@ app.controller('SOGroupIndexCtrl', ['$scope', 'SOGroup', '$modal', 'toaster',
 
   }]);
 
-app.controller('SOGroupNewCtrl', ['$scope', '$rootScope', 'SOGroup', 'Currency', '$state', 'toaster',
-  function ($scope, $rootScope, SOGroup, Currency, $state, toaster) {
+app.controller('SOGroupNewCtrl', ['$scope', '$rootScope', 'SOGroup', 'Currency', '$state', '$stateParams', 'toaster',
+  function ($scope, $rootScope, SOGroup, Currency, $state, $stateParams, toaster) {
 
     // init
     $scope.soGroup = new SOGroup();
+
+    $scope.soGroup.orderMethodName = $stateParams.type;
 
     Currency.find(
       function (result) {
@@ -77,6 +84,7 @@ app.controller('SOGroupNewCtrl', ['$scope', '$rootScope', 'SOGroup', 'Currency',
     $scope.addSOGroup = function () {
       // Get user id
       $scope.soGroup.personId = $rootScope.currentUser.id;
+      $scope.soGroup.orderMethodName = $stateParams.type;
       SOGroup.create(
         {},
         $scope.soGroup,

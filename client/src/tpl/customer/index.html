@@ -28,10 +28,8 @@
         <th>
           <select ng-model="sp.orderMethodName" class="input-sm form-control">
             <option value="">All</option>
-            <option value="Grosir">Grosir</option>
-            <option value="Kanvas">Kanvas</option>
+            <option ng-repeat="m in orderMethods" value="{{m.name}}">{{m.name}}</option>
           </select>
-          <input ng-hide="true" st-search="'orderMethodName'" placeholder="search.." class="input-sm form-control" type="search"/>
         </th>
         <th>
           <input ng-model="sp.name" placeholder="search.." class="input-sm form-control" type="search"
@@ -104,7 +102,7 @@
           <span ng-if="child.orderMethodName==='Kanvas'" class="label bg-success">{{child.orderMethodName}}</span>
           <span ng-if="(child.orderMethodName!=='Kanvas' && child.orderMethodName!=='Grosir')" class="label bg-light">{{child.orderMethodName}}</span>
         </td>
-        <td>&#8735; {{child.name}}</td>
+        <td>&#8627; {{child.name}}</td>
         <td>{{child.addressCity}}<span ng-show="child.addressCity && child.addressProvince">,</span> {{child.addressProvince}}</td>
         <td>{{child.phone}}</td>
         <td>

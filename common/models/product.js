@@ -27,6 +27,35 @@ module.exports = function(Product) {
 
   };
 
+  Product.currentPriceByMethodAndCurrencyOptions = function (id, method, currency, limit, cb) {
+    var currentDateISO = new Date().toISOString();
+
+    if (!limit) {
+      limit = 1000; // just limit to 1000
+    }
+
+    Product.app.models.ProductPrice.find({
+        where: {
+          and: [
+            {productId: id},
+            {dateFrom: {lte: currentDateISO}},
+            {dateTo: {gte: currentDateISO}},
+            {active: true},
+            {orderMethodName: method},
+            {currencyCode: currency}
+          ]
+        },
+        order: [
+          'id DESC' // get latest price first
+        ],
+        limit: limit
+      },
+      function (err, instance) {
+        cb(null, instance);
+      });
+
+  };
+
   Product.currentStockOptions = function (id, limit, cb) {
     var currentDateISO = new Date().toISOString();
 
@@ -217,6 +246,20 @@ module.exports = function(Product) {
         {arg: 'limit', type: 'number', http: {source: 'query'}}
       ],
       returns: {arg: 'currentPriceOptions', type: 'array', root: true}
+    }
+  );
+  Product.remoteMethod (
+    'currentPriceByMethodAndCurrencyOptions',
+    {
+      description: 'Get all current active prices for certain product {id} filtered by {method}',
+      http: {path: '/:id/currentPriceByMethodOptions', verb: 'get'},
+      accepts: [
+        {arg: 'id', type: 'number', required: 'true'},
+        {arg: 'method', type: 'string', required: 'true', http: {source: 'query'}},
+        {arg: 'currency', type: 'string', required: 'true', http: {source: 'query'}},
+        {arg: 'limit', type: 'number', http: {source: 'query'}}
+      ],
+      returns: {arg: 'currentPriceByMethodAndCurrencyOptions', type: 'array', root: true}
     }
   );
   Product.remoteMethod (

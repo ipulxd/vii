@@ -1,16 +1,18 @@
 /**
  * Created by saiful.
  */
-app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filter', 'AuthService',
-  function($scope, Order, $modal, toaster, $filter, AuthService) {
+app.controller('OrderIndexCtrl', ['$scope', 'Order', 'OrderMethod', '$modal', 'toaster', '$filter',
+  function($scope, Order, OrderMethod, $modal, toaster, $filter) {
 
     //  pagination
     $scope.itemsByPage=10;
 
+    $scope.orderMethods = OrderMethod.find();
+
     // index
     $scope.orders = [];
     Order.find({
-        filter: {include: ['customer']}
+        filter: {include: ['customer'], order: ['id DESC']}
       }, function (result) {
       angular.forEach(result, function (res) {
         res.datePurchase = $filter('date')(res.datePurchase, 'yyyy-MM-dd'); //cast date as localtime
@@ -41,11 +43,11 @@ app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filt
             var index = $scope.orders.indexOf(row);
             if (index !== -1) {
               $scope.orders.splice(index, 1);
-              toaster.pop('success', '', 'Order deleted successfully');
+              toaster.pop('success', '', 'Order berhasil dihapus');
             }
           },
           function (error) {
-            toaster.pop('error', '', 'Failed to delete order! You might need to remove order item first');
+            toaster.pop('error', '', 'Order gagal dihapus! Silakan hapus item order terlebih dahulu (klik Detail)');
           }
         );
       });
@@ -53,29 +55,85 @@ app.controller('OrderIndexCtrl', ['$scope', 'Order', '$modal', 'toaster', '$filt
 
   }]);
 
-app.controller('OrderNewCtrl', ['$scope', '$rootScope', 'Order', 'Customer', 'OrderMethod', 'PaymentMethod',
-  'OrderGroup', '$state', 'toaster',
-  function ($scope, $rootScope, Order, Customer, OrderMethod, PaymentMethod, OrderGroup, $state, toaster) {
+app.controller('OrderNewCtrl', ['$scope', '$rootScope', 'Order', 'SOGroup', 'SONumber', 'SOGroupValue', 'Customer',
+  'PaymentMethod', '$state', '$stateParams', 'toaster',
+  function ($scope, $rootScope, Order, SOGroup, SONumber, SOGroupValue, Customer, PaymentMethod, $state,
+            $stateParams, toaster) {
 
     // init
     $scope.order = new Order();
 
+    $scope.order.orderMethodName = $stateParams.type;
+
     // default values
     $scope.order.datePurchase = moment().format('DD-MMMM-YYYY');
+    $scope.order.dateDelivery = moment().add(1, 'days').format('DD-MMMM-YYYY');
+    $scope.order.datePayment = moment().add(15, 'days').format('DD-MMMM-YYYY');
 
     // Get user id
     $scope.order.personId = $rootScope.currentUser.id;
 
+    // get-all SO Group & today SO Number
+    $scope.soGroups = [];
+    var nowDate = moment().format('DD-MMMM-YYYY');
+    var nowYear = moment().format('YYYY');
+    SOGroup.find({
+      filter: {
+        where: { orderMethodName: $stateParams.type },
+        include: [
+          {
+            relation: 'soNumbers',
+            scope: {
+              where: {
+                and: [ { dateOpen: {lte: nowDate} }, { dateClose: {gte: nowDate} } ]
+              }
+            }
+          },
+          {
+            relation: 'soGroupValues',
+            scope: {
+              where: {
+                 year: nowYear
+              }
+            }
+          }
+        ]
+      }
+    }, function (result) {
+
+      angular.forEach(result, function (group, key) {
+        if (group.soGroupValues.length > 0) {
+          group.soGroupCurrentValue = group.soGroupValues[0].currentValue;
+        } else {
+          // create year
+          SOGroupValue.create(
+            {},
+            {
+              year: nowYear,
+              currentValue: 0,
+              soGroupId: group.id
+            },
+            function () {
+              toaster.pop('success', '', 'New Year Order Group '+group.name+' initialized');
+            },
+            function () {
+              toaster.pop('error', '', 'New Year Order Group failed to initialize!');
+            }
+          );
+          group.soGroupCurrentValue = 0;
+        }
+        if (group.soGroupCurrentValue < group.maxLimit) // masukkan jika masih ada ruang untuk order
+          $scope.soGroups.push(group);
+      });
+
+    });
+
     // get-all customers
-    Customer.find(
+    Customer.find({
+        filter: { where: { and: [ {orderMethodName: $stateParams.type}, {active: true}]}}
+      },
       function (result) {
         $scope.customers = result;
-      }
-    );
-    // get-all order methods
-    OrderMethod.find(
-      function (result) {
-        $scope.orderMethods = result;
       }
     );
     // get-all payment method
@@ -84,50 +142,180 @@ app.controller('OrderNewCtrl', ['$scope', '$rootScope', 'Order', 'Customer', 'Or
         $scope.paymentMethods = result;
       }
     );
-    // get-all group
-    OrderGroup.find(
-      function (result) {
-        $scope.orderGroups = result;
+    // orderByOptions
+    $scope.orderByOptions = ['Phone', 'SMS', 'Datang'];
+
+    // watch selected soGroup
+    $scope.$watchGroup(['order.soGroup'], function() {
+      if ($scope.order.soGroup) {
+        if ($scope.order.soGroup.soNumbers.length < 1) {
+          $scope.order.newSONumber = true;
+        } else {
+          $scope.order.soNumberId = $scope.order.soGroup.soNumbers[0].id;
+        }
+
       }
-    );
+    });
+    $scope.$watchGroup(['order.newSONumber'], function() {
+      if ($scope.order.newSONumber) {
+        $scope.order.soNumber = new SONumber;
+        $scope.order.soNumber.dateOpen = moment().format('DD-MMMM-YYYY');
+        $scope.order.soNumber.dateClose = moment().format('DD-MMMM-YYYY');
+        $scope.order.soNumberId = null;
+      } else {
+        $scope.order.soNumberId = $scope.order.soGroup.soNumbers[0].id;
+      }
+    });
 
     $scope.addOrder = function () {
-      // Get user id
-      $scope.order.personId = $rootScope.currentUser.id;
-      Order.create(
-        {},
-        $scope.order,
-        function (result) {
-          toaster.pop('success', '', 'Order added successfully, now you can add order items');
-          $state.go('app.order.detail', {id: result.id});
-        },
-        function (error) {
-          toaster.pop('error', '', 'Failed to add a order!');
-        }
-      );
-    };
 
+      if ($scope.order.newSONumber) {
+        if (!$scope.order.soNumber.dateOpen) $scope.order.soNumber.dateOpen = moment().format('DD-MMMM-YYYY');
+        if (!$scope.order.soNumber.dateClose) $scope.order.soNumber.dateClose = moment().format('DD-MMMM-YYYY');
+        $scope.order.soNumber.soGroupId = $scope.order.soGroup.id;
+        $scope.order.soNumber.currencyCode = $scope.order.soGroup.currencyCode;
+        $scope.order.soNumber.personId = $rootScope.currentUser.id;
+        $scope.order.soNumber.orderMethodName = $stateParams.type;
+        $scope.order.soNumber.soAmount = 0;
+        SONumber.create(
+          {},
+          $scope.order.soNumber,
+          function (result) {
+            toaster.pop('success', '', 'Nomor SO baru telah berhasil dibuat. No: '+result.id);
+            // START: Create Order
+            $scope.order.personId = $rootScope.currentUser.id;
+            $scope.order.orderMethodName = $stateParams.type; //reset
+            $scope.order.currencyCode = $scope.order.soGroup.currencyCode;
+            $scope.order.orderAmount = 0;
+            $scope.order.soNumberId = result.id;
+            delete $scope.order.soGroup;
+            delete $scope.order.soNumber;
+            Order.create(
+              {},
+              $scope.order,
+              function (result) {
+                toaster.pop('success', '', 'Order baru telah berhasil dibuat. Selanjutnya tambahkan item order.');
+                $state.go('app.order.detail', {id: result.id});
+              },
+              function (error) {
+                toaster.pop('error', '', 'Order gagal dibuat');
+              }
+            );
+          },
+          function (error) {
+            toaster.pop('error', '', 'Nomor SO gagal dibuat!');
+          }
+        );
+      } else {
+        // START: Create Order
+        $scope.order.personId = $rootScope.currentUser.id;
+        $scope.order.orderMethodName = $stateParams.type; //reset
+        $scope.order.currencyCode = $scope.order.soGroup.currencyCode;
+        $scope.order.orderAmount = 0;
+        delete $scope.order.soGroup;
+        delete $scope.order.soNumber;
+        Order.create(
+          {},
+          $scope.order,
+          function (result) {
+            toaster.pop('success', '', 'Order baru telah berhasil dibuat. Selanjutnya tambahkan item order.');
+            $state.go('app.order.detail', {id: result.id});
+          },
+          function (error) {
+            toaster.pop('error', '', 'Order gagal dibuat');
+          }
+        );
+      }
+    };
 
   }]);
 
-app.controller('OrderEditCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', 'PaymentMethod', 'OrderGroup',
+app.controller('OrderEditCtrl', ['$scope', 'Order', 'Customer', 'PaymentMethod', 'SOGroup', 'SONumber', 'SOGroupValue',
   '$state', '$stateParams', 'toaster',
-  function ($scope, Order, Customer, OrderMethod, PaymentMethod, OrderGroup, $state, $stateParams, toaster) {
+  function ($scope, Order, Customer, PaymentMethod, SOGroup, SONumber, SOGroupValue, $state, $stateParams, toaster) {
 
-    // get current order
-    $scope.order = Order.findById( { id: $stateParams.id } );
-    $scope.orderCustomerIdCantBeChanged = $scope.order.customerId;
+    // get-all SO Group & today SO Number
+    $scope.soGroups = [];
+    var nowDate = moment().format('DD-MMMM-YYYY');
+    var nowYear = moment().format('YYYY');
+    SOGroup.find({
+      filter: {
+        where: { orderMethodName: $stateParams.type },
+        include: [
+          {
+            relation: 'soNumbers',
+            scope: {
+              where: {
+                and: [ { dateOpen: {lte: nowDate} }, { dateClose: {gte: nowDate} } ]
+              }
+            }
+          },
+          {
+            relation: 'soGroupValues',
+            scope: {
+              where: {
+                year: nowYear
+              }
+            }
+          }
+        ]
+      }
+    }, function (result) {
+      angular.forEach(result, function (group, key) {
+        if (group.soGroupValues.length > 0) {
+          group.soGroupCurrentValue = group.soGroupValues[0].currentValue;
+        } else {
+          // create year
+          SOGroupValue.create(
+            {},
+            {
+              year: nowYear,
+              currentValue: 0,
+              soGroupId: group.id
+            },
+            function () {
+              toaster.pop('success', '', 'New Year Order Group '+group.name+' initialized');
+            },
+            function () {
+              toaster.pop('error', '', 'New Year Order Group failed to initialize!');
+            }
+          );
+          group.soGroupCurrentValue = 0;
+        }
+        if (group.soGroupCurrentValue < group.maxLimit) // masukkan jika masih ada ruang untuk order
+          $scope.soGroups.push(group);
+      });
+
+      Order.findById(
+        { id: $stateParams.id,
+          filter: {
+            include: {
+              relation: 'soNumber',
+              scope: {
+                include: {
+                  relation: 'soGroup',
+                  scope: {
+                    include: 'soNumbers'
+                  }
+                }
+              }
+            }
+          }
+        },
+        function (result) {
+          $scope.order = result;
+          $scope.orderCustomerIdCantBeChanged = $scope.order.customerId;
+          $scope.order.orderMethodName = $stateParams.type;
+          $scope.order.soGroup = result.soNumber.soGroup;
+        }
+      );
+
+    });
 
     // get-all customers
     Customer.find(
       function (result) {
         $scope.customers = result;
-      }
-    );
-    // get-all order methods
-    OrderMethod.find(
-      function (result) {
-        $scope.orderMethods = result;
       }
     );
     // get-all payment method
@@ -136,14 +324,13 @@ app.controller('OrderEditCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', '
         $scope.paymentMethods = result;
       }
     );
-    // get-all group
-    OrderGroup.find(
-      function (result) {
-        $scope.orderGroups = result;
-      }
-    );
+
+    // orderByOptions
+    $scope.orderByOptions = ['Phone', 'SMS', 'Datang'];
 
     // update
+    // TODO: calculate order amount upon change SO group
+    // Override: cant change group or number, please delete and recreate new
     $scope.updateOrder = function () {
       $scope.order.customerId = $scope.orderCustomerIdCantBeChanged; // for security
 
@@ -151,11 +338,11 @@ app.controller('OrderEditCtrl', ['$scope', 'Order', 'Customer', 'OrderMethod', '
         { where: {id: $stateParams.id } },
         $scope.order,
         function () {
-          toaster.pop('success', '', 'Order updated successfully');
+          toaster.pop('success', '', 'Metadata Order berhasil diperbarui');
           $state.go('app.order.list');
         },
         function (error) {
-          toaster.pop('error', '', 'Failed to update order!');
+          toaster.pop('error', '', 'Metadata Order gagal diperbarui!');
         }
       );
 
@@ -170,19 +357,12 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
     //  pagination
     $scope.itemsByPage=10;
 
-    // get current order (panel info)
-    $scope.order = {};
-    Order.findById({
-      id: $stateParams.id,
-      filter: {include: ['customer', 'orderGroup', 'person']}
-    }, function (result) {
-      $scope.order = result;
-      $scope.order.datePurchase = $filter('date')(result.datePurchase, 'yyyy-MM-dd'); //cast date as localtime
-      $scope.order.datePayment = $filter('date')(result.datePayment, 'yyyy-MM-dd');
-      $scope.order.dateDelivery = $filter('date')(result.dateDelivery, 'yyyy-MM-dd');
-      $scope.order.totalPrice = {};  // reset object
-      $scope.getAllOrderItems(); // get-all order items
-    });
+    // function to calculate order price
+    $scope.calculateTotalOrderPrice = function (key, each, total) {
+      if (total[key] === undefined) total[key] = 0; // check if object key exist
+      total[key] += Number(each);
+      return total;
+    };
 
     // start: ORDER ITEMS (table contents)
     $scope.orderItems = [];
@@ -205,11 +385,42 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
       });
     };
 
-    $scope.calculateTotalOrderPrice = function (key, each, total) {
-      if (total[key] === undefined) total[key] = 0; // check if object key exist
-      total[key] += Number(each);
-      return total;
-    };
+    // get current order (panel info)
+    var nowYear = new Date().getFullYear();
+    $scope.order = {};
+    Order.findById({
+      id: $stateParams.id,
+      filter: {
+        include: [
+          'customer',
+          'person',
+          {
+            relation: 'soNumber',
+            scope: {
+              include: {
+                relation: 'soGroup',
+                scope: {
+                  include: {
+                    relation: 'soGroupValues',
+                    scope: {
+                      where: {year: nowYear},
+                      limit: 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]}
+    }, function (result) {
+      $scope.order = result;
+      $scope.order.datePurchase = $filter('date')(result.datePurchase, 'yyyy-MM-dd'); //cast date as localtime
+      $scope.order.datePayment = $filter('date')(result.datePayment, 'yyyy-MM-dd');
+      $scope.order.dateDelivery = $filter('date')(result.dateDelivery, 'yyyy-MM-dd');
+      $scope.order.totalPrice = {};  // reset object
+      $scope.getAllOrderItems(); // get-all order items
+    });
+
 
     // start: add item functions
     // defaults
@@ -223,6 +434,7 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
       $scope.item.priceName = null;
       $scope.item.note = null;
       $scope.item.productId = null;
+      $scope.item.product = null;
       $scope.item.currencyCode = null;
       $scope.item.stockBatchs = null;
       $scope.item.priceDetails = null;
@@ -238,7 +450,7 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
       if ($scope.item.allActiveProducts.length < 1) { // check whether active product loaded or not
         Product.find({
           filter: {
-            where: { active: true },
+            where: { and: [ {active: true} ]},
             order: [ 'name ASC' ]
           }
         }, function (result) {
@@ -249,8 +461,8 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
     $scope.getAllActiveProducts(); // init
 
     $scope.item.getProductPrices = function (product) {
-      Product.currentPriceOptions(
-        { id: product.id },
+      Product.currentPriceByMethodAndCurrencyOptions(
+        { id: product.id, method: $scope.order.orderMethodName, currency: $scope.order.currencyCode },
         function (result) {
           $scope.item.productPrices = result;
           $scope.item.productPrice = result[0]; // take first recommended price
@@ -290,6 +502,10 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
     // watch selected stocks and quantity changes
     $scope.$watchGroup(['item.productStocksSelected', 'item.quantity'], function() {
       $scope.item.processStocks();
+      if ($scope.item.priceTotal > $scope.item.maxOrderVal) {
+        toaster.pop('error', '', 'Jumlah harga barang melebihi nilai order maksimal yang diperkenankan!');
+        $scope.item.quantity = 0;
+      }
     });
 
     $scope.item.processStocks = function () {
@@ -312,6 +528,8 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
 
     // add items
     $scope.addItem = function () {
+      $scope.item.maxOrderVal = Number($scope.order.soNumber.soGroup.maxLimit) -
+                                Number($scope.order.soNumber.soGroup.soGroupValues[0].currentValue);
       var modalInstance = $modal.open({
         templateUrl: 'tpl/order/modal.form.item.html',
         controller: 'OrderModalInstanceCtrl',
@@ -332,31 +550,30 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
         $scope.item.priceDetails = JSON.stringify($scope.item.productPrice);
         $scope.item.stockBatchs = JSON.stringify($scope.item.stockBatchs);
 
-        //angular.forEach(stockUpdateData, function (val, key) {
-        //  stockUpdateData[key].amountCurrent = val.amountAfter;
-        //  //delete stockUpdateData[key].amountAfter;
-        //});
 
         Product.bulkUpdateStockAmount(
           {cmd: 'subtract'},
           stockUpdateData,
           function (result) {
             if (!result)
-              toaster.pop('error', '', 'Failed to add an item!');
+              toaster.pop('error', '', 'Item gagal ditambahkan!');
             else {
               Order.orderItems.create(
                 {id: $scope.order.id},
                 $scope.item,
                 function (result) {
+                  $scope.order.orderAmount = Number($scope.order.orderAmount) + Number(result.priceTotal);
+                  $scope.order.soNumber.soGroup.soGroupValues[0].currentValue =
+                    Number($scope.order.soNumber.soGroup.soGroupValues[0].currentValue) + Number(result.priceTotal);
                   result.productName = $scope.item.product.name; // hack
                   $scope.order.totalPrice = $scope.calculateTotalOrderPrice(
                     result.currencyCode, result.priceTotal, $scope.order.totalPrice);
                   $scope.orderItems.push(result);
-                  toaster.pop('success', '', 'Item added successfully');
+                  toaster.pop('success', '', 'Item berhasil ditambahkan');
                   $scope.resetValues();
                 },
                 function (error) {
-                  toaster.pop('error', '', 'Failed to add an item!');
+                  toaster.pop('error', '', 'Item gagal ditambahkan!');
                 }
               );
             }
@@ -385,7 +602,7 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
           stockUpdateData,
           function (result) {
             if (!result)
-              toaster.pop('error', '', 'Failed to delete an item!');
+              toaster.pop('error', '', 'Item barang gagal dihapus!');
             else {
               Order.orderItems.destroyById(
                 { id: $scope.order.id,
@@ -394,11 +611,15 @@ app.controller('OrderDetailCtrl', ['$scope', 'Order', 'Product', '$state',
                   var index = $scope.orderItems.indexOf(row);
                   if (index !== -1) {
                     $scope.orderItems.splice(index, 1);
-                    toaster.pop('success', '', 'Item deleted successfully');
+                    toaster.pop('success', '', 'Item barang berhasil dihapus');
+                    $scope.order.orderAmount = Number($scope.order.orderAmount) - Number(row.priceTotal);
+                    $scope.order.soNumber.soGroup.soGroupValues[0].currentValue =
+                      Number($scope.order.soNumber.soGroup.soGroupValues[0].currentValue) - Number(result.priceTotal);
+                    $scope.resetValues();
                   }
                 },
                 function (error) {
-                  toaster.pop('error', '', 'Failed to delete item!');
+                  toaster.pop('error', '', 'Item barang gagal dihapus!');
                 }
               );
             }

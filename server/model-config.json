@@ -94,5 +94,11 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "SOGroupValue": {
+    "dataSource": "postgreDs",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }

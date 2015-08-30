@@ -1,10 +1,10 @@
 <div class="modal-body wrapper-lg">
   <div class="row">
-    <h3 class="m-t-none m-b-md font-thin">Add new item</h3>
+    <h3 class="m-t-none m-b-md font-thin">Tambah Item Barang</h3>
     <form role="form" name="form">
       <div class="row">
         <div class="form-group col-sm-12">
-          <label class="col-sm-2 control-label m-t-xs text-right">Product Name</label>
+          <label class="col-sm-2 control-label m-t-xs text-right">Nama Barang</label>
           <div class="col-sm-10 input-group">
             <ui-select ng-model="item.product" ng-required="true" class="form-validation" on-select="item.getProductPricesAndStocks($item)">
               <ui-select-match placeholder="Select product..">{{$select.selected.name}}</ui-select-match>
@@ -23,7 +23,7 @@
       </div>
       <div class="row">
         <div class="form-group col-sm-12">
-          <label class="col-sm-2 control-label m-t-xs text-right">Price</label>
+          <label class="col-sm-2 control-label m-t-xs text-right">Harga Satuan</label>
           <div class="col-sm-10 input-group">
             <ui-select ng-model="item.productPrice" ng-required="true" class="form-validation">
               <ui-select-match placeholder="Select price..">{{$select.selected.amount | number}} {{$select.selected.currencyCode}}</ui-select-match>
@@ -34,8 +34,8 @@
                 </div>
                 <div ng-bind-html="pri.name | highlight: $select.search"></div>
                 <small>
-                  From: <span ng-bind-html="pri.dateFrom | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
-                  To: <span ng-bind-html="pri.dateTo | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
+                  Dari Tanggal: <span ng-bind-html="pri.dateFrom | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
+                  s.d.: <span ng-bind-html="pri.dateTo | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
                 </small>
               </ui-select-choices>
             </ui-select>
@@ -49,7 +49,7 @@
       </div>
       <div class="row">
         <div class="form-group col-sm-12">
-          <label class="col-sm-2 control-label m-t-xs text-right m-r-xs">Stock</label>
+          <label class="col-sm-2 control-label m-t-xs text-right m-r-xs">Stok</label>
           <div class="col-sm-7 m-l-n-md p-l">
             <ui-select multiple ng-model="item.productStocksSelected" ng-required="true" class="form-validation"
                        theme="bootstrap" ng-disabled="disabled">
@@ -57,35 +57,36 @@
               <ui-select-choices repeat="sto in item.productStocks | filter: $select.search">
                 <div ng-bind-html="sto.batchName | highlight: $select.search"></div>
                 <small>
-                  Amount: <span ng-bind-html="sto.amountCurrent | number | highlight: $select.search"></span>,
-                  Expire: <span ng-bind-html="sto.dateExpire | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
+                  Jml Stok: <span ng-bind-html="sto.amountCurrent | number | highlight: $select.search"></span>,
+                  Kadaluarsa: <span ng-bind-html="sto.dateExpire | date : 'dd-MMM-yyyy' | highlight: $select.search"></span>
                 </small>
               </ui-select-choices>
             </ui-select>
           </div>
-          <label class="col-sm-3 m-t-xs">Stock available: {{ item.calculateStock() | number }}</label>
+          <label class="col-sm-3 m-t-xs">Stok Tersedia: {{ item.calculateStock() | number }}</label>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-sm-12">
-          <label class="col-sm-2 control-label m-t-xs text-right m-r-xs">Quantity</label>
-          <div class="col-sm-4 m-l-n-md">
+          <label class="col-sm-2 control-label m-t-xs text-right m-r-xs">Kuantitas</label>
+          <div class="col-sm-2 m-l-n-md">
             <input type="number" name="quantity" ng-model="item.quantity" ng-required="true" min="1"
                    max="{{item.productStocksCalculated}}" class="form-control form-validation" >
             <span ng-show="form.quantity.$dirty && form.quantity.$error.max" class="text-danger">
-              Order quantity can not more than stock selected. Please add more stocks.
+              Kuantitas order tidak boleh melebihi stok yang dipilih. Silakan tambahkan stok dalam pilihan.
             </span>
             <span ng-show="item.stockBatchs.length" class="text-info-dker">
-              Stock will be used:
+              Stok yang akan digunakan:
               <i ng-repeat="stock in item.displayStockBatchs" class="btn btn-default btn-xs">{{stock.batchName}}</i>
             </span>
           </div>
-          <label class="col-sm-6 m-t-xs">Total Item Price: <strong>{{ item.calculateTotalPrices() | number }}</strong></label>
+          <label class="col-sm-4 m-t-xs">Jumlah Harga: <strong>{{ item.calculateTotalPrices() | number }}</strong></label>
+          <label class="col-sm-4 m-t-xs alert-warning font-bold">Batas Jml Harga: {{item.maxOrderVal | number}}</label>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-lg-12">
-          <label  class="col-sm-2 control-label m-t-xs text-right">Note</label>
+          <label  class="col-sm-2 control-label m-t-xs text-right">Catatan</label>
           <div class="col-sm-10 input-group">
             <input type="text" ng-model="item.note" class="form-control form-validation">
           </div>

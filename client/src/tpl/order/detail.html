@@ -1,7 +1,7 @@
 <div class="bg-light lter b-b wrapper-md hidden-print">
   <div class="row-fluid">
     <div class="col-10">
-      <h1 class="m-n font-thin h3">Order Details</h1>
+      <h1 class="m-n font-thin h3">Detail Order</h1>
     </div>
     <div class="col-2 pull-right m-r-md m-t-n-lg">
       <a href="" onclick="window.history.back()" class="btn btn-primary">
@@ -15,48 +15,58 @@
     <div class="panel-heading">
       <div class="row">
         <div class="col-md-10 h4">
-          Customer: <strong>{{order.customer.name}}</strong>
+          Pelanggan: <strong>{{order.customer.name}}</strong>
         </div>
-        <a ui-sref="app.order.edit({id:order.id})" class="btn btn-xs btn-success pull-right m-r-md">
+        <a ui-sref="app.order.edit({id:order.id, type:order.orderMethodName})" class="btn btn-xs btn-success pull-right m-r-md">
           <i class="fa fa-edit"></i> Edit
         </a>
         <a ng-click="orderInvoice()" class="btn btn-xs btn-primary pull-right m-r-xs">
-          <i class="fa fa-file-o"></i> Invoice
+          <i class="fa fa-file-o"></i> Nota Tagihan
         </a>
       </div>
     </div>
     <div class="row wrapper-sm">
       <div class="col-md-4">
-        <i class="icon-basket"></i>
-        Order Method: {{order.orderMethodName}}
-      </div>
-      <div class="col-md-4">
-        <i class="icon-credit-card"></i>
-        Payment Method: {{order.paymentMethodName}}
-      </div>
-      <div class="col-md-4">
         <i class="icon-layers"></i>
-        Order Group:
-        <a ng-show="order.orderGroup.name" ui-sref="app.ordergroup.detail({id:order.orderGroupId})">
-          {{order.orderGroup.name}}
-          <i class="h6 m-l-xs fa fa-external-link"></i>
-        </a>
-        <span ng-hide="order.orderGroup.name">(none)</span>
+        SO, Nomor: <strong>{{order.soNumberId}}</strong>
+        Group: <strong>{{order.soNumber.soGroup.name}}</strong>
+      </div>
+      <div class="col-md-4">
+        <i class="icon-basket-loaded"></i>
+        Cara Order: {{order.orderBy}}
+      </div>
+      <div class="col-md-4">
+        <i class="icon-calendar"></i>
+        Tanggal Order: {{order.datePurchase | date : "dd-MMM-yyyy"}}
       </div>
     </div>
     <div class="row wrapper-sm m-t-n-sm">
       <div class="col-md-4">
-        <i class="icon-calendar"></i>
-        Purchase Date: {{order.datePurchase | date : "dd-MMM-yyyy"}}
+        <i class="icon-grid"></i>
+        Tipe: <strong>{{order.orderMethodName}}</strong>
+      </div>
+      <div class="col-md-4">
+        <i class="icon-credit-card"></i>
+        Cara Bayar: {{order.paymentMethodName}}
       </div>
       <div class="col-md-4">
         <i class="icon-calendar"></i>
-        Payment Date: {{order.datePayment | date : "dd-MMM-yyyy"}}
+        Tanggal Bayar: {{order.datePayment | date : "dd-MMM-yyyy"}}
         <span ng-hide="order.datePayment">(none)</span>
       </div>
+    </div>
+    <div class="row wrapper-sm m-t-n-sm">
+      <div class="col-md-4">
+        <i class="icon-user"></i>
+        Sales: {{order.person.firstname}} {{order.person.lastname}}
+      </div>
+      <div class="col-md-4">
+        <i class="icon-globe"></i>
+        Mata Uang: {{order.currencyCode}}
+      </div>
       <div class="col-md-4">
         <i class="icon-calendar"></i>
-        Delivery Date: {{order.dateDelivery | date : "dd-MMM-yyyy"}}
+        Tanggal Kirim: {{order.dateDelivery | date : "dd-MMM-yyyy"}}
         <span ng-hide="order.dateDelivery">(none)</span>
       </div>
     </div>
@@ -69,12 +79,15 @@
   </div>
   <div class="panel b-a">
     <div class="panel-heading no-border bg-primary">
-      <span class="h4 m-r-sm">Order Items</span>
+      <span class="h4 m-r-sm">Data Barang</span>
       <button type="button" class="btn btn-xs btn-success" ng-click="addItem()">
-        <i class="glyphicon glyphicon-plus"></i> Add new
+        <i class="glyphicon glyphicon-plus"></i> Tambah Barang
       </button>
       <div class="pull-right h4">
-        <span class="h4" ng-show="order.totalPrice">Total Price: </span>
+        Total: {{order.currencyCode}} {{order.orderAmount | number}}
+      </div>
+      <div class="pull-right h4" ng-hide="true">
+        <span class="h4" ng-show="order.totalPrice">Total Harga: </span>
         <span ng-repeat="(cur, amount) in order.totalPrice">
           <i class="h6 icon-tag m-l-xs"></i> <strong>{{amount | number}} {{cur}}</strong>
         </span>
@@ -83,11 +96,11 @@
     <table st-table="displayOrderItems" st-safe-src="orderItems" class="table table-striped">
       <thead>
       <tr>
-        <th st-sort="productName">Product Name</th>
-        <th st-sort="quantity">Quantity</th>
-        <th st-sort="priceEach">Price Each</th>
-        <th st-sort="priceTotal">Total</th>
-        <th st-sort="currencyCode">Currency</th>
+        <th st-sort="productName">Nama Barang</th>
+        <th st-sort="quantity">Kuantitas</th>
+        <th st-sort="priceEach">Harga Satuan</th>
+        <th st-sort="priceTotal">Jumlah Harga</th>
+        <th st-sort="currencyCode">MU</th>
         <th></th>
       </tr>
       <tr>

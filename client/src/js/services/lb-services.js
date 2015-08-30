@@ -4303,6 +4303,46 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.Product#currentPriceByMethodAndCurrencyOptions
+         * @methodOf lbServices.Product
+         *
+         * @description
+         *
+         * Get all current active prices for certain product {id} filtered by {method}
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{number}` - 
+         *
+         *  - `method` – `{string}` - 
+         *
+         *  - `currency` – `{string}` - 
+         *
+         *  - `limit` – `{number=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Product` object.)
+         * </em>
+         */
+        "currentPriceByMethodAndCurrencyOptions": {
+          isArray: true,
+          url: urlBase + "/Products/:id/currentPriceByMethodOptions",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.Product#currentStockOptions
          * @methodOf lbServices.Product
          *
@@ -18427,6 +18467,33 @@ module.factory(
           method: "HEAD"
         },
 
+        // INTERNAL. Use SOGroup.soGroupValues.findById() instead.
+        "prototype$__findById__soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.destroyById() instead.
+        "prototype$__destroyById__soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.updateById() instead.
+        "prototype$__updateById__soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "PUT"
+        },
+
         // INTERNAL. Use SOGroup.soNumbers() instead.
         "prototype$__get__soNumbers": {
           isArray: true,
@@ -18474,6 +18541,31 @@ module.factory(
         // INTERNAL. Use SOGroup.orders.count() instead.
         "prototype$__count__orders": {
           url: urlBase + "/SOGroups/:id/orders/count",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues() instead.
+        "prototype$__get__soGroupValues": {
+          isArray: true,
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.create() instead.
+        "prototype$__create__soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "POST"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.destroyAll() instead.
+        "prototype$__delete__soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.count() instead.
+        "prototype$__count__soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues/count",
           method: "GET"
         },
 
@@ -18899,6 +18991,12 @@ module.factory(
         // INTERNAL. Use SONumber.soGroup() instead.
         "::get::SONumber::soGroup": {
           url: urlBase + "/SONumbers/:id/soGroup",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroupValue.soGroup() instead.
+        "::get::SOGroupValue::soGroup": {
+          url: urlBase + "/SOGroupValues/:id/soGroup",
           method: "GET"
         },
       }
@@ -19746,6 +19844,991 @@ module.factory(
         R.orders.updateById = function() {
           var TargetResource = $injector.get("Order");
           var action = TargetResource["::updateById::SOGroup::orders"];
+          return action.apply(R, arguments);
+        };
+    /**
+     * @ngdoc object
+     * @name lbServices.SOGroup.soGroupValues
+     * @header lbServices.SOGroup.soGroupValues
+     * @object
+     * @description
+     *
+     * The object `SOGroup.soGroupValues` groups methods
+     * manipulating `SOGroupValue` instances related to `SOGroup`.
+     *
+     * Call {@link lbServices.SOGroup#soGroupValues SOGroup.soGroupValues()}
+     * to query all related instances.
+     */
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup#soGroupValues
+         * @methodOf lbServices.SOGroup
+         *
+         * @description
+         *
+         * Queries soGroupValues of SOGroup.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R.soGroupValues = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::get::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#count
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Counts soGroupValues of SOGroup.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        R.soGroupValues.count = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::count::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#create
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Creates a new instance in soGroupValues of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R.soGroupValues.create = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::create::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#createMany
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Creates a new instance in soGroupValues of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R.soGroupValues.createMany = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::createMany::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#destroyAll
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Deletes all soGroupValues of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.soGroupValues.destroyAll = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::delete::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#destroyById
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Delete a related item by id for soGroupValues.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for soGroupValues
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.soGroupValues.destroyById = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::destroyById::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#findById
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Find a related item by id for soGroupValues.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for soGroupValues
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R.soGroupValues.findById = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::findById::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroup.soGroupValues#updateById
+         * @methodOf lbServices.SOGroup.soGroupValues
+         *
+         * @description
+         *
+         * Update a related item by id for soGroupValues.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `fk` – `{*}` - Foreign key for soGroupValues
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R.soGroupValues.updateById = function() {
+          var TargetResource = $injector.get("SOGroupValue");
+          var action = TargetResource["::updateById::SOGroup::soGroupValues"];
+          return action.apply(R, arguments);
+        };
+
+    return R;
+  }]);
+
+/**
+ * @ngdoc object
+ * @name lbServices.SOGroupValue
+ * @header lbServices.SOGroupValue
+ * @object
+ *
+ * @description
+ *
+ * A $resource object for interacting with the `SOGroupValue` model.
+ *
+ * ## Example
+ *
+ * See
+ * {@link http://docs.angularjs.org/api/ngResource.$resource#example $resource}
+ * for an example of using this object.
+ *
+ */
+module.factory(
+  "SOGroupValue",
+  ['LoopBackResource', 'LoopBackAuth', '$injector', function(Resource, LoopBackAuth, $injector) {
+    var R = Resource(
+      urlBase + "/SOGroupValues/:id",
+      { 'id': '@id' },
+      {
+
+        // INTERNAL. Use SOGroupValue.soGroup() instead.
+        "prototype$__get__soGroup": {
+          url: urlBase + "/SOGroupValues/:id/soGroup",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#create
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "create": {
+          url: urlBase + "/SOGroupValues",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#createMany
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Create a new instance of the model and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "createMany": {
+          isArray: true,
+          url: urlBase + "/SOGroupValues",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#upsert
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "upsert": {
+          url: urlBase + "/SOGroupValues",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#exists
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Check whether a model instance exists in the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `exists` – `{boolean=}` - 
+         */
+        "exists": {
+          url: urlBase + "/SOGroupValues/:id/exists",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#findById
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Find a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         *  - `filter` – `{object=}` - Filter defining fields and include
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "findById": {
+          url: urlBase + "/SOGroupValues/:id",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#find
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Find all instances of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "find": {
+          isArray: true,
+          url: urlBase + "/SOGroupValues",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#findOne
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Find first instance of the model matched by filter from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `filter` – `{object=}` - Filter defining fields, where, include, order, offset, and limit
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "findOne": {
+          url: urlBase + "/SOGroupValues/findOne",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#updateAll
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "updateAll": {
+          url: urlBase + "/SOGroupValues/update",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#deleteById
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "deleteById": {
+          url: urlBase + "/SOGroupValues/:id",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#count
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Count instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "count": {
+          url: urlBase + "/SOGroupValues/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#prototype$updateAttributes
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Update attributes for a model instance and persist it into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        "prototype$updateAttributes": {
+          url: urlBase + "/SOGroupValues/:id",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#createChangeStream
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Create a change stream.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `options` – `{object=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `changes` – `{ReadableStream=}` - 
+         */
+        "createChangeStream": {
+          url: urlBase + "/SOGroupValues/change-stream",
+          method: "POST"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.findById() instead.
+        "::findById::SOGroup::soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.destroyById() instead.
+        "::destroyById::SOGroup::soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.updateById() instead.
+        "::updateById::SOGroup::soGroupValues": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/SOGroups/:id/soGroupValues/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues() instead.
+        "::get::SOGroup::soGroupValues": {
+          isArray: true,
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "GET"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.create() instead.
+        "::create::SOGroup::soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "POST"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.createMany() instead.
+        "::createMany::SOGroup::soGroupValues": {
+          isArray: true,
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "POST"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.destroyAll() instead.
+        "::delete::SOGroup::soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use SOGroup.soGroupValues.count() instead.
+        "::count::SOGroup::soGroupValues": {
+          url: urlBase + "/SOGroups/:id/soGroupValues/count",
+          method: "GET"
+        },
+      }
+    );
+
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#updateOrCreate
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Update an existing model instance or insert a new one into the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *   This method does not accept any parameters.
+         *   Supply an empty object or omit this argument altogether.
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroupValue` object.)
+         * </em>
+         */
+        R["updateOrCreate"] = R["upsert"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#update
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Update instances of the model matched by where from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["update"] = R["updateAll"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#destroyById
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["destroyById"] = R["deleteById"];
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#removeById
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Delete a model instance by id from the data source.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - Model id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R["removeById"] = R["deleteById"];
+
+
+    /**
+    * @ngdoc property
+    * @name lbServices.SOGroupValue#modelName
+    * @propertyOf lbServices.SOGroupValue
+    * @description
+    * The name of the model represented by this $resource,
+    * i.e. `SOGroupValue`.
+    */
+    R.modelName = "SOGroupValue";
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.SOGroupValue#soGroup
+         * @methodOf lbServices.SOGroupValue
+         *
+         * @description
+         *
+         * Fetches belongsTo relation soGroup.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `SOGroup` object.)
+         * </em>
+         */
+        R.soGroup = function() {
+          var TargetResource = $injector.get("SOGroup");
+          var action = TargetResource["::get::SOGroupValue::soGroup"];
           return action.apply(R, arguments);
         };
 
